@@ -84,7 +84,8 @@ const method = (state, action) => {
 
         case ActionTypes.RESET_METHOD:
             return {
-                code: '',
+                ...state,
+                code: 'return input;',
                 IOs: IOs(state.IOs, action)
             };
 

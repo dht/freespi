@@ -26,7 +26,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         makeMethod: (name, data) => {
             data.id = name;
             dispatch(makeMethod(name, data));
-            ownProps.history.push(`/${ownProps.id}/${name}`);
+            ownProps.history.push(`/${ownProps.id}/_`);
         },
         runAll: () => {
             dispatch(runAll());

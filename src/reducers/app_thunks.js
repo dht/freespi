@@ -1,7 +1,7 @@
 import * as api from "../utils/firebase";
 import {
     resetWorkspace, setCurrent, setIOs, setIsLoading, setWorkspace,
-    updateMethodCode,
+    updateMethodCode, resetMethod,
 } from "./appState/appState_actions";
 import {
     codeSelector, currentSelector, fourSelector, idSelector, IOsSelector,
@@ -59,11 +59,11 @@ export const makeMethod = (name, data = {}) => {
 
         // reset current
         if (current === "_") {
-            dispatch(setIOs(current, {}));
-            api.saveIOs(current, {});
+            dispatch(resetMethod(current));
+            api.reset_();
         }
 
-        dispatch(setCurrent(name));
+        dispatch(setCurrent("_"));
         dispatch(updateMethodCode(name, data.code, data.isPromise));
 
         dispatch(setIOs(name, IOs));

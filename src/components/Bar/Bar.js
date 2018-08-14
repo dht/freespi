@@ -1,17 +1,30 @@
-import React, {Component} from 'react';
-import './Bar.css';
+import React, { Component } from "react";
+import "./Bar.css";
 import Tester from "../Tester/TesterContainer";
 import Clock from "../Clock/ClockContainer";
-import {Button} from "./Button";
-import {getKeys} from '../../utils/keys';
+import { Button } from "./Button";
+import { getKeys } from "../../utils/keys";
 
-const Divider = () => <div className="Divider-container">
-</div>
+const Divider = () => <div className="Divider-container" />;
 
 class Bar extends Component {
-    render() {
+    keydown = ev => {
+        if (ev.keyCode == 83 && (navigator.platform.match("Mac") ? ev.metaKey : ev.ctrlKey)) {
+            ev.preventDefault();
+            this.props.save();
+          }
+    };
 
-        const {autoplay} = this.props;
+    componentDidMount() {
+        document.addEventListener("keydown", this.keydown, false);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener("keydown", this.keydown);
+    }
+
+    render() {
+        const { autoplay } = this.props;
 
         const keys = getKeys();
 
@@ -22,16 +35,30 @@ class Bar extends Component {
                         animated={autoplay}
                         onClick={this.props.run}
                         onContextMenu={this.props.toggleAutoPlay}
-                        title={keys.RUN}>play_arrow</Button>
-                    <Button onClick={this.props.save}
-                            title={keys.SAVE}>save</Button>
-                    <Divider/>
-                    <Button onClick={this.props.showGlobals} title={keys.GLOBALS}>language</Button>
-                    <Button onClick={this.props.onNavigateHome} title={keys.HOME}>home</Button>
+                        title={keys.RUN}
+                    >
+                        play_arrow
+                    </Button>
+                    <Button onClick={this.props.save} title={keys.SAVE}>
+                        save
+                    </Button>
+                    <Divider />
+                    <Button
+                        onClick={this.props.showGlobals}
+                        title={keys.GLOBALS}
+                    >
+                        language
+                    </Button>
+                    <Button
+                        onClick={this.props.onNavigateHome}
+                        title={keys.HOME}
+                    >
+                        home
+                    </Button>
                     <Clock />
                 </div>
                 <div className="half">
-                    <Tester onClick={this.props.loadIO} run={this.props.run}/>
+                    <Tester onClick={this.props.loadIO} run={this.props.run} />
                 </div>
             </div>
         );

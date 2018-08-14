@@ -52,7 +52,7 @@ export const runCode = async (input, code, globals = "") => {
 
     try {
         const parsedCode = _code(input, code, globals);
-        console.log('parsedCode ->', parsedCode);
+        // console.log('parsedCode ->', parsedCode);
         output = new Function(parsedCode)();
     } catch (e) {
         return {
