@@ -26,7 +26,8 @@ export const Ace = (props) => {
             enableLiveAutocompletion: false,
             enableSnippets: false,
             showLineNumbers: true,
-            tabSize: 2
+            tabSize: 2,
+            $blockScrolling: "Infinity"
         }}
     />
 }

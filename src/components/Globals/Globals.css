@@ -12,7 +12,9 @@
   .Globals-container .content .list {
     width: 180px;
     background-color: #444444;
-    color: #ccc; }
+    color: #ccc;
+    overflow: auto;
+    height: 500px; }
   .Globals-container .content .preview {
     flex: 1; }
 
