@@ -1,0 +1,75 @@
+.Globals-container .actions {
+  display: flex;
+  flex-direction: row; }
+
+.Globals-container .Button-container {
+  flex: 1;
+  text-align: center; }
+
+.Globals-container .content {
+  display: flex;
+  flex-direction: row; }
+  .Globals-container .content .list {
+    width: 180px;
+    background-color: #444444;
+    color: #ccc; }
+  .Globals-container .content .preview {
+    flex: 1; }
+
+.Globals-container ul {
+  padding: 5px 0;
+  margin: 0;
+  list-style-type: none; }
+  .Globals-container ul li {
+    padding: 5px 10px;
+    margin: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; }
+    .Globals-container ul li .material-icons {
+      display: none;
+      font-size: 18px; }
+      .Globals-container ul li .material-icons:hover {
+        color: pink; }
+    .Globals-container ul li .test {
+      display: none; }
+      .Globals-container ul li .test span {
+        display: inline-block;
+        padding: 1px 4px;
+        margin: 0 1px;
+        font-size: 11px;
+        border-radius: 5px; }
+      .Globals-container ul li .test .ok {
+        background-color: green; }
+      .Globals-container ul li .test .fail {
+        background-color: indianred; }
+    .Globals-container ul li:hover {
+      background-color: #272822; }
+      .Globals-container ul li:hover .material-icons {
+        display: block; }
+      .Globals-container ul li:hover .test {
+        display: none; }
+
+.ReactModal__Overlay {
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+
+.ReactModal__Content {
+  opacity: 0;
+  z-index: 1001;
+  height: 550px;
+  top: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+  right: auto !important;
+  min-width: 700px; }
+
+.ReactModal__Content--after-open {
+  opacity: 1;
+  transition: opacity 150ms; }
+
+.ReactModal__Content--before-close {
+  opacity: 0; }

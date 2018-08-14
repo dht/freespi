@@ -1,0 +1,18 @@
+.Code-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column; }
+  .Code-container .row {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    padding-top: 10px;
+    background-color: #272822;
+    height: 93%;
+    box-sizing: border-box; }
+  .Code-container .column {
+    display: flex;
+    flex-direction: column;
+    flex: 1; }
+  .Code-container .aceContainer {
+    flex: 1; }

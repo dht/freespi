@@ -1,0 +1,54 @@
+.Tester-container {
+  display: flex;
+  border-left:1px solid gray;
+
+  .tests {
+    display: flex;
+    overflow:hidden;
+    max-width:510px;
+    flex-wrap: nowrap;
+  }
+
+  .box {
+    min-width: 50px;
+    line-height: 48px;
+    border-right: 1px solid gray;
+    cursor: pointer;
+    position: relative;
+    color:#ccc;
+
+    .popoi {
+      position:absolute;
+      bottom:3px;
+      right:3px;
+      width:6px;
+      height:6px;
+      border-radius: 2px;
+      background-color:transparent;
+    }
+
+    &:hover {
+      background-color:#eee;
+    }
+
+    &.selected {
+      background-color: #eee;
+    }
+
+    &.active {
+      color: #333;
+    }
+
+    &.ok {
+      .popoi {
+        background-color:greenyellow;
+      }
+    }
+
+    &.failing {
+      .popoi {
+        background-color:red;
+      }
+    }
+  }
+}

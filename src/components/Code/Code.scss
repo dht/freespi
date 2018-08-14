@@ -1,0 +1,25 @@
+.Code-container {
+  height:100%;
+  display: flex;
+  flex-direction: column;
+
+  .row {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    padding-top:10px;
+    background-color:#272822;
+    height:93%;
+    box-sizing: border-box;
+  }
+
+  .column {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .aceContainer {
+    flex:1;
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": 0.4924749749205706,
+  "methods": {
+    "_": {
+      "id": "_",
+      "code": "a",
+      "input": "b",
+      "output": "c"
+    },
+    "isString": {
+      "id": "isString",
+      "code": "a",
+      "input": "b",
+      "output": "c"
+    }
+  }
+}

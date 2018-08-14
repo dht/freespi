@@ -1,0 +1,31 @@
+.Clock-container {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 20px;
+
+    img {
+        width: 30px;
+        height: 30px;
+    }
+
+    &.running {
+        img {
+            animation: rotating 2s linear infinite;
+        }
+    }
+
+    @keyframes rotating {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+}
+
+.nice {
+    color:green;
+}

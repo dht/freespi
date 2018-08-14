@@ -1,0 +1,33 @@
+.Tester-container {
+  display: flex;
+  border-left: 1px solid gray; }
+  .Tester-container .tests {
+    display: flex;
+    overflow: hidden;
+    max-width: 510px;
+    flex-wrap: nowrap; }
+  .Tester-container .box {
+    min-width: 50px;
+    line-height: 48px;
+    border-right: 1px solid gray;
+    cursor: pointer;
+    position: relative;
+    color: #ccc; }
+    .Tester-container .box .popoi {
+      position: absolute;
+      bottom: 3px;
+      right: 3px;
+      width: 6px;
+      height: 6px;
+      border-radius: 2px;
+      background-color: transparent; }
+    .Tester-container .box:hover {
+      background-color: #eee; }
+    .Tester-container .box.selected {
+      background-color: #eee; }
+    .Tester-container .box.active {
+      color: #333; }
+    .Tester-container .box.ok .popoi {
+      background-color: greenyellow; }
+    .Tester-container .box.failing .popoi {
+      background-color: red; }
