@@ -6,6 +6,17 @@
     display: flex;
     text-align: center;
     flex: 1; }
+    .Bar-container .half.space-between {
+      justify-content: space-between; }
+  .Bar-container .github {
+    background-image: url(/images/GitHub-Mark-120px-plus.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 28px;
+    height: 28px;
+    display: block;
+    align-self: center;
+    margin-right: 20px; }
 
 .Button-container {
   padding: 0 10px;

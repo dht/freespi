@@ -57,8 +57,9 @@ class Bar extends Component {
                     </Button>
                     <Clock />
                 </div>
-                <div className="half">
+                <div className="half space-between"> 
                     <Tester onClick={this.props.loadIO} run={this.props.run} />
+                    <a className="github" href="https://github.com/dht/freespi" target="_blank" />
                 </div>
             </div>
         );
