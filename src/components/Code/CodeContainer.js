@@ -2,7 +2,7 @@ import React from "react";
 import {connect} from "react-redux";
 import Code from './Code';
 import {setCurrentIO, updateCode, setIsRunning} from "../../reducers/appState/appState_actions";
-import {autosave, makeMethod, runAll} from "../../reducers/app_thunks";
+import {autosave, makeMethod, runAll, download} from "../../reducers/app_thunks";
 import {withRouter} from "react-router-dom";
 import {fourSelector} from "../../selectors/selectors";
 
@@ -30,6 +30,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         runAll: () => {
             dispatch(runAll());
+        },
+        download: () => {
+            dispatch(download());
         },
         setIsRunning: (isRunning) => {
             dispatch(setIsRunning(isRunning));

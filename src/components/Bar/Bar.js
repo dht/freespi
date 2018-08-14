@@ -55,6 +55,11 @@ class Bar extends Component {
                     >
                         home
                     </Button>
+                    <Button
+                        onClick={this.props.download}
+                    >
+                        cloud_download
+                    </Button>
                     <Clock />
                 </div>
                 <div className="half space-between"> 

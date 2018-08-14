@@ -7,7 +7,7 @@ import {
     codeSelector, currentSelector, fourSelector, idSelector, IOsSelector,
     methodsSelector
 } from "../selectors/selectors";
-import {methodsToGlobal, runCode} from "../utils/code";
+import {methodsToGlobal, runCode, downloadCode} from "../utils/code";
 
 export const loadApp = (id, current, currentIO) => {
 
@@ -103,6 +103,18 @@ export const runAll = () => {
 
         dispatch(setIOs(current, IOs));
         api.saveIOs(current, IOs);
+    }
+}
+
+
+export const download = () => {
+
+    return (dispatch, getState) => {
+        const state = getState(),
+            data = fourSelector(state),
+            {globals} = data;
+
+            downloadCode("code.txt", globals);
     }
 }
 

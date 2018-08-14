@@ -143,6 +143,7 @@ class Code extends Component {
                     save={this.save}
                     loadIO={this.props.loadIO}
                     runAll={this.props.runAll}
+                    download={this.props.download}
                     autoplay={autoplay}
                     toggleAutoPlay={this.toggleAutoPlay}
                 />

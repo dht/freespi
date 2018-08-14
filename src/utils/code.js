@@ -57,7 +57,7 @@ export const runCode = async (input, code, globals = "") => {
     } catch (e) {
         return {
             ok: false,
-            output: e.message,
+            output: e.message
         };
     }
 
@@ -125,16 +125,27 @@ export const methodsToGlobal = methods => {
     }, "");
 };
 
-
-
-const _prepareInput = (input) => {
+const _prepareInput = input => {
     const result = identify(input);
 
     if (typeof input === "string" && !result.isObject) {
         input = '"' + input + '"';
     }
-    ;
-
     return input;
-}
+};
 
+export const downloadCode = (filename, text) => {
+    var element = document.createElement("a");
+    element.setAttribute(
+        "href",
+        "data:text/plain;charset=utf-8," + encodeURIComponent(text)
+    );
+    element.setAttribute("download", filename);
+
+    element.style.display = "none";
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
+};
