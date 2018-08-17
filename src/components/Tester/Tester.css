@@ -19,7 +19,7 @@
       right: 3px;
       width: 6px;
       height: 6px;
-      border-radius: 2px;
+      border-radius: 6px;
       background-color: transparent; }
     .Tester-container .box:hover {
       background-color: #eee; }
@@ -28,6 +28,6 @@
     .Tester-container .box.active {
       color: #333; }
     .Tester-container .box.ok .popoi {
-      background-color: greenyellow; }
+      background-color: green; }
     .Tester-container .box.failing .popoi {
       background-color: red; }
