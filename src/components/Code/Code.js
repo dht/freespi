@@ -129,6 +129,8 @@ class Code extends Component {
         const result = await runCode(input, code, globals);
         this.props.setIsRunning(false);
 
+        console.log('result ->', result);
+
         this.setState({ output: result.output, isPromise: result.isPromise });
 
         this.props.setCode({

@@ -6,8 +6,8 @@ ${input}
 const fnc = async() => {
     try {
         ${code}
-    } catch (e) {
-        return e;
+    } catch (e) {        
+        return Promise.reject(e);
     }
 }
 
@@ -50,22 +50,29 @@ const identify = input => {
 export const runCode = async (input, code, globals = "") => {
     let output, isPromise;
 
-    try {
-        const parsedCode = _code(input, code, globals);
-        // console.log('parsedCode ->', parsedCode);
-        output = new Function(parsedCode)();
-    } catch (e) {
-        return {
-            ok: false,
-            output: e.message
-        };
-    }
+    // debugger;
+
+    const ts = new Date().getTime();
+
+    const parsedCode = _code(input, code, globals);
+    
+    output = new Function(parsedCode)().catch(e => ({
+        ok: false,
+        error: e
+    }));
 
     if (output.then) {
         output = await output;
         isPromise = true;
     } else {
         isPromise = false;
+    }
+
+    if (output && output.ok === false) {
+        const {error} = output,
+            {stack, message} = error;
+
+        return { ok: false, output: `${message}\n\n${stack}`, isPromise };
     }
 
     if (typeof output === "object") {
