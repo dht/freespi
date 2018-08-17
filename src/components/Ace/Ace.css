@@ -17,3 +17,16 @@
     .Ace-container .ace-label span {
       color: #999;
       font-size: 10px; }
+  .Ace-container textarea.code {
+    flex: 1;
+    width: 100%;
+    max-height: 430px;
+    background-color: #272822;
+    color: #ddd;
+    border: 1px solid gray;
+    padding: 5px 10px;
+    box-sizing: border-box;
+    border-top: none;
+    border-left: 50px solid #2f3129;
+    outline: none;
+    font: 14px / normal "Monaco", "Menlo", "Ubuntu Mono", "Consolas", "source-code-pro", monospace; }

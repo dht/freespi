@@ -68,7 +68,9 @@ export const runCode = async (input, code, globals = "") => {
         isPromise = false;
     }
 
-    output = JSON.stringify(output, null, 4);
+    if (typeof output === "object") {
+        output = JSON.stringify(output, null, 4);
+    }
 
     return { ok: true, output, isPromise };
 };

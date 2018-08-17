@@ -6,15 +6,43 @@ import "brace/mode/javascript";
 import "brace/theme/monokai";
 import "brace/ext/language_tools";
 
-export const Ace = props => {
-    const {label, current} = props;
+const SimpleAce = props => {
+    const { label, current, simple } = props;
 
     return (
         <div className="Ace-container">
-        {label ? <div className="ace-label">
-            <div>{label}</div>
-            <span>{current}</span>
-        </div>: null}
+            {label ? (
+                <div className="ace-label">
+                    <div>{label}</div>
+                    <span>{current}</span>
+                </div>
+            ) : null}
+            <textarea
+                className="code"
+                rows={30}
+                cols={30}
+                onChange={props.onChange}
+                value={props.value}
+                onFocus={props.onFocus}
+                focus={props.focus}
+            />
+        </div>
+    );
+};
+
+export const Ace = props => {
+    const { label, current, simple } = props;
+
+    if (simple) return <SimpleAce {...props} />;
+
+    return (
+        <div className="Ace-container">
+            {label ? (
+                <div className="ace-label">
+                    <div>{label}</div>
+                    <span>{current}</span>
+                </div>
+            ) : null}
             <AceEditor
                 mode={props.mode || "javascript"}
                 theme="monokai"
