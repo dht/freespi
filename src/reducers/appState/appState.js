@@ -1,7 +1,7 @@
 export const initialState = {
     id: null,
     isLoading: false,
-    isRunning: true,
+    isRunning: false,
     current: '_',
     currentIO: '1',
     methods: {

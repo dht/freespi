@@ -1,55 +1,82 @@
-import React, {Component} from 'react';
-import './Code.css';
-import {Ace} from "../Ace/Ace";
+import React, { Component } from "react";
+import "./Code.css";
+import { Ace } from "../Ace/Ace";
 import Bar from "../Bar/Bar";
-import {runCode} from "../../utils/code";
-import {AceDiff} from "../Ace/AceDiff";
+import { runCode } from "../../utils/code";
+import { AceDiff } from "../Ace/AceDiff";
 // import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 // import 'react-tabs/style/react-tabs.css';
-import 'rc-tabs/dist/rc-tabs.css';
-import Tabs, { TabPane } from 'rc-tabs';
-import TabContent from 'rc-tabs/lib/TabContent';
-import ScrollableInkTabBar from 'rc-tabs/lib/ScrollableInkTabBar';
+import "rc-tabs/dist/rc-tabs.css";
+import Tabs, { TabPane } from "rc-tabs";
+import TabContent from "rc-tabs/lib/TabContent";
+import ScrollableInkTabBar from "rc-tabs/lib/ScrollableInkTabBar";
 
 class Code extends Component {
-
     state = {
-        code: '',
-        input: '',
-        output: '',
-        expected: '',
+        code: "",
+        input: "",
+        output: "",
+        expected: "",
         width: window.innerWidth,
         height: window.innerHeight,
-    }
+        focusedAce: 1,
+        activeTab: "1",
+    };
 
     componentWillReceiveProps(props) {
-        const {code, input, output, expected} = props;
+        const { code, input, output, expected } = props;
 
-        if (code !== this.state.code ||
+        if (
+            code !== this.state.code ||
             input !== this.state.input ||
-            output !== this.state.output||
+            output !== this.state.output ||
             expected !== this.state.expected
         ) {
-            this.setState({code, input, output, expected});
+            this.setState({ code, input, output, expected });
         }
     }
 
     updateWindowDimensions = () => {
         this.setState({ width: window.innerWidth, height: window.innerHeight });
-    }
+    };
 
     componentDidMount() {
-        window.addEventListener('keydown', this.keydown)
-        window.addEventListener('resize', this.updateWindowDimensions);
+        window.addEventListener("keydown", this.keydown);
+        window.addEventListener("resize", this.updateWindowDimensions);
     }
 
     componentWillUnmount() {
-        window.removeEventListener('keydown', this.keydown)
-        window.removeEventListener('resize', this.updateWindowDimensions);
+        window.removeEventListener("keydown", this.keydown);
+        window.removeEventListener("resize", this.updateWindowDimensions);
         clearInterval(this.interval);
     }
 
-    keydown = (ev) => {
+    nextInput = () => {
+      let {focusedAce, activeTab} = this.state;
+
+      focusedAce = Math.max(1, (focusedAce + 1) % 5);
+
+      if (focusedAce === 3) {
+          activeTab = "1";
+      }
+
+      if (focusedAce === 4) {
+        activeTab = "2";
+    }
+
+      this.setState({focusedAce, activeTab});
+    };
+
+    focus = (which)=> {
+        this.setState({focusedAce: which});
+    }
+
+    keydown = ev => {
+        if (ev.which === 9 && ev.altKey) {
+            ev.preventDefault();
+            this.nextInput();
+        }
+
         if (ev.which === 13 && ev.metaKey) {
             this.run();
 
@@ -81,42 +108,60 @@ class Code extends Component {
 
             this.props.loadIO(i);
         }
-    }
+    };
 
     run = async () => {
-        let {code, input, expected} = this.state,
-            {globals, isLoading} = this.props;
+        let { code, input, expected } = this.state,
+            { globals, isLoading } = this.props;
 
         if (isLoading) return;
 
-        this.setState({output: '// running...'});
+        this.setState({ output: "// running..." });
         this.props.setIsRunning(true);
         const result = await runCode(input, code, globals);
         this.props.setIsRunning(false);
 
-        this.setState({output: result.output, isPromise: result.isPromise});
+        this.setState({ output: result.output, isPromise: result.isPromise });
 
-        this.props.setCode({code, input, output: result.output, expected, isPromise: result.isPromise});
-    }
+        this.props.setCode({
+            code,
+            input,
+            output: result.output,
+            expected,
+            isPromise: result.isPromise
+        });
+    };
 
     save = () => {
-        let {code, input, output, expected, isPromise, isLoading} = this.state;
+        let {
+            code,
+            input,
+            output,
+            expected,
+            isPromise,
+            isLoading
+        } = this.state;
 
         if (isLoading) return;
 
         const name = prompt();
 
         if (name) {
-            this.props.setCode({code, input, output, expected, isPromise});
-            this.props.makeMethod(name, {code, input, output, expected, isPromise});
+            this.props.setCode({ code, input, output, expected, isPromise });
+            this.props.makeMethod(name, {
+                code,
+                input,
+                output,
+                expected,
+                isPromise
+            });
         }
-    }
+    };
 
-    toggleAutoPlay = (ev) => {
-
+    toggleAutoPlay = ev => {
         ev.preventDefault();
 
-        let {autoplay} = this.state;
+        let { autoplay } = this.state;
 
         autoplay = !autoplay;
 
@@ -126,11 +171,11 @@ class Code extends Component {
             clearInterval(this.interval);
         }
 
-        this.setState({autoplay});
-    }
+        this.setState({ autoplay });
+    };
 
     render() {
-        const {code, input, output, expected, width, autoplay} = this.state;
+        const { code, input, output, expected, width, autoplay, focusedAce, activeTab } = this.state;
 
         let height = this.state.height - 100;
 
@@ -149,36 +194,75 @@ class Code extends Component {
                 />
                 <div className="row">
                     <div className="column">
-                        <Ace value={code} onChange={(code) => this.setState({code})}/>
+                        <Ace
+                            value={code}
+                            onChange={code => this.setState({ code })}
+                            focus={focusedAce === 1}
+                            onFocus={()=>this.focus(1)}
+                        />
                     </div>
                     <div className="column">
-                        <Ace value={input} onChange={(input) => this.setState({input})} height={height/2}/>
+                        <Ace
+                            value={input}
+                            onChange={input => this.setState({ input })}
+                            height={height / 2}
+                            focus={focusedAce === 2}
+                            onFocus={()=>this.focus(2)}
+                        />
 
-                        <div style={{maxWidth: width/2, color:'#ccc'}}>
-                        <Tabs
-                            defaultActiveKey="1"
-                            renderTabBar={()=><ScrollableInkTabBar />}
-                            renderTabContent={()=><TabContent />}
-                            tabBarPosition={"bottom"}
-                        >
-                            <TabPane tab='result' key="1">
-                                <Ace value={output} onChange={(output) => this.setState({output})} height={height/2}/>
-                            </TabPane>
-                            <TabPane tab='expected' key="2" disabled={false}>
-                                <Ace value={expected} onChange={(expected) => this.setState({expected})} height={height/2}/>
-                            </TabPane>
-                            <TabPane tab='diff' key="3" disabled={false}>
-                                <AceDiff value1={output} value2={expected} height={height/2}/>
-                            </TabPane>
-                        </Tabs>
+                        <div style={{ maxWidth: width / 2, color: "#ccc" }}>
+                            <Tabs
+                                activeKey={activeTab}
+                                defaultActiveKey="1"
+                                renderTabBar={() => <ScrollableInkTabBar />}
+                                renderTabContent={() => <TabContent />}
+                                tabBarPosition={"bottom"}
+                                onChange={key => this.setState({activeTab: key})}
+                            >
+                                <TabPane tab="result" key="1">
+                                    <Ace
+                                        value={output}
+                                        onChange={output =>
+                                            this.setState({ output })
+                                        }
+                                        height={height / 2}
+                                        focus={focusedAce === 3}
+                                        onFocus={()=>this.focus(3)}
+                                    />
+                                </TabPane>
+                                <TabPane
+                                    tab="expected"
+                                    key="2"
+                                    disabled={false}
+                                >
+                                    <Ace
+                                        value={expected}
+                                        onChange={expected =>
+                                            this.setState({ expected })
+                                        }
+                                        height={height / 2}
+                                        focus={focusedAce === 4}
+                                        onFocus={()=>this.focus(4)}
+                                    />
+                                </TabPane>
+                                <TabPane tab="diff" key="3" disabled={false}>
+                                    <AceDiff
+                                        value1={output}
+                                        value2={expected}
+                                        height={height / 2}
+                                    />
+                                </TabPane>
+                            </Tabs>
                         </div>
                     </div>
                 </div>
-
-
             </div>
         );
     }
+}
+
+const whichFocus = () => {
+
 }
 
 export default Code;

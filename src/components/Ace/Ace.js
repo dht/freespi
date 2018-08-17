@@ -20,6 +20,8 @@ export const Ace = (props) => {
         showGutter={true}
         highlightActiveLine={true}
         value={props.value}
+        onFocus={props.onFocus}
+        focus={props.focus}
         style={{flex: 1, width: "100%", height:props.height}}
         setOptions={{
             enableBasicAutocompletion: true,
