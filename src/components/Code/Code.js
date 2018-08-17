@@ -79,12 +79,13 @@ class Code extends Component {
     };
 
     keydown = ev => {
-        if (ev.which === 9 && ev.altKey) {
+        if (ev.which === 69 && ev.metaKey) {
             ev.preventDefault();
-            this.nextInput();
+            this.expectedEqualToResult();
         }
 
         if (ev.which === 13 && ev.metaKey) {
+            ev.preventDefault();
             this.run();
 
             if (ev.shiftKey) {
@@ -181,6 +182,15 @@ class Code extends Component {
         this.setState({ autoplay });
     };
 
+    expectedEqualToResult = () => {
+        const { output } = this.state;
+
+        this.setState({ expected: output });
+        setTimeout(() => {
+            this.run();
+        }, 1000);
+    };
+
     render() {
         const {
             code,
@@ -226,7 +236,19 @@ class Code extends Component {
                             onFocus={() => this.focus(2)}
                         />
 
-                        <div style={{ maxWidth: width / 2, color: "#ccc" }}>
+                        <div
+                            style={{
+                                maxWidth: width / 2,
+                                color: "#ccc",
+                                position: "relative"
+                            }}
+                        >
+                            <button
+                                className="equal"
+                                onClick={() => this.expectedEqualToResult()}
+                            >
+                                Expected=
+                            </button>
                             <Tabs
                                 activeKey={activeTab}
                                 defaultActiveKey="1"

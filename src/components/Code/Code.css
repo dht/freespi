@@ -16,3 +16,15 @@
     flex: 1; }
   .Code-container .aceContainer {
     flex: 1; }
+  .Code-container button.equal {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100px;
+    height: 30px;
+    border: none;
+    background-color: white;
+    z-index: 999;
+    cursor: pointer; }
+    .Code-container button.equal:hover {
+      background-color: #eee; }

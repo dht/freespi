@@ -29,7 +29,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             ownProps.history.push(`/${ownProps.id}/_`);
         },
         runAll: () => {
-            dispatch(runAll());
+            setTimeout(() => {
+                dispatch(runAll());
+            }, 1000);
         },
         download: () => {
             dispatch(download());

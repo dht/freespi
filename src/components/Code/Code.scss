@@ -3,6 +3,7 @@
   display: flex;
   flex-direction: column;
 
+
   .row {
     display: flex;
     flex-direction: row;
@@ -21,5 +22,21 @@
 
   .aceContainer {
     flex:1;
+  }
+
+  button.equal {
+    position:absolute;
+    top:0;
+    right:0;
+    width:100px;
+    height:30px;
+    border:none;
+    background-color:white;
+    z-index: 999;
+    cursor:pointer;
+
+    &:hover {
+      background-color:#eee;
+    }
   }
 }
