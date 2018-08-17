@@ -46,11 +46,20 @@ const identify = input => {
         return {};
     }
 };
+const returnError = (error) => {
+    const { stack, message } = error;
+    const ok = false;
+    const output = `/*\n${message}\n\n${stack}*/`;
+
+    return {
+        ok,
+        output
+    }
+}
 
 export const runCode = async (input, code, globals = "") => {
     let output,
-        isPromise,
-        ok = true;
+        isPromise;
 
     // debugger;
 
@@ -58,10 +67,14 @@ export const runCode = async (input, code, globals = "") => {
 
     const parsedCode = _code(input, code, globals);
 
+    try {
     output = new Function(parsedCode)().catch(e => ({
         ok: false,
         error: e
     }));
+    }  catch (e) {
+        return returnError(e);
+    }
 
     if (output.then) {
         output = await output;
@@ -71,18 +84,15 @@ export const runCode = async (input, code, globals = "") => {
     }
 
     if (output && output.ok === false) {
-        const { error } = output,
-            { stack, message } = error;
-
-        ok = false;
-        output = `/*\n${message}\n\n${stack}*/`;
+        const { error } = output;
+        return returnError(error);
     }
     
     if (typeof output !== "string") {
         output = JSON.stringify(output, null, 4);
     }
 
-    return { ok, output, isPromise };
+    return { ok: true, output, isPromise };
 };
 
 const extractInputVariables = input => {
