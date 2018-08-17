@@ -20,7 +20,7 @@ class Code extends Component {
         width: window.innerWidth,
         height: window.innerHeight,
         focusedAce: 1,
-        activeTab: "1",
+        activeTab: "1"
     };
 
     componentWillReceiveProps(props) {
@@ -43,6 +43,13 @@ class Code extends Component {
     componentDidMount() {
         window.addEventListener("keydown", this.keydown);
         window.addEventListener("resize", this.updateWindowDimensions);
+
+        // required for saving a new workspace
+        if (this.props.current === "_") {
+            setTimeout(() => {
+                this.run();
+            }, 1500);
+        }
     }
 
     componentWillUnmount() {
@@ -52,24 +59,24 @@ class Code extends Component {
     }
 
     nextInput = () => {
-      let {focusedAce, activeTab} = this.state;
+        let { focusedAce, activeTab } = this.state;
 
-      focusedAce = Math.max(1, (focusedAce + 1) % 5);
+        focusedAce = Math.max(1, (focusedAce + 1) % 5);
 
-      if (focusedAce === 3) {
-          activeTab = "1";
-      }
+        if (focusedAce === 3) {
+            activeTab = "1";
+        }
 
-      if (focusedAce === 4) {
-        activeTab = "2";
-    }
+        if (focusedAce === 4) {
+            activeTab = "2";
+        }
 
-      this.setState({focusedAce, activeTab});
+        this.setState({ focusedAce, activeTab });
     };
 
-    focus = (which)=> {
-        this.setState({focusedAce: which});
-    }
+    focus = which => {
+        this.setState({ focusedAce: which });
+    };
 
     keydown = ev => {
         if (ev.which === 9 && ev.altKey) {
@@ -175,7 +182,16 @@ class Code extends Component {
     };
 
     render() {
-        const { code, input, output, expected, width, autoplay, focusedAce, activeTab } = this.state;
+        const {
+            code,
+            input,
+            output,
+            expected,
+            width,
+            autoplay,
+            focusedAce,
+            activeTab
+        } = this.state;
 
         let height = this.state.height - 100;
 
@@ -198,7 +214,7 @@ class Code extends Component {
                             value={code}
                             onChange={code => this.setState({ code })}
                             focus={focusedAce === 1}
-                            onFocus={()=>this.focus(1)}
+                            onFocus={() => this.focus(1)}
                         />
                     </div>
                     <div className="column">
@@ -207,7 +223,7 @@ class Code extends Component {
                             onChange={input => this.setState({ input })}
                             height={height / 2}
                             focus={focusedAce === 2}
-                            onFocus={()=>this.focus(2)}
+                            onFocus={() => this.focus(2)}
                         />
 
                         <div style={{ maxWidth: width / 2, color: "#ccc" }}>
@@ -217,7 +233,9 @@ class Code extends Component {
                                 renderTabBar={() => <ScrollableInkTabBar />}
                                 renderTabContent={() => <TabContent />}
                                 tabBarPosition={"bottom"}
-                                onChange={key => this.setState({activeTab: key})}
+                                onChange={key =>
+                                    this.setState({ activeTab: key })
+                                }
                             >
                                 <TabPane tab="result" key="1">
                                     <Ace
@@ -227,7 +245,7 @@ class Code extends Component {
                                         }
                                         height={height / 2}
                                         focus={focusedAce === 3}
-                                        onFocus={()=>this.focus(3)}
+                                        onFocus={() => this.focus(3)}
                                     />
                                 </TabPane>
                                 <TabPane
@@ -242,7 +260,7 @@ class Code extends Component {
                                         }
                                         height={height / 2}
                                         focus={focusedAce === 4}
-                                        onFocus={()=>this.focus(4)}
+                                        onFocus={() => this.focus(4)}
                                     />
                                 </TabPane>
                                 <TabPane tab="diff" key="3" disabled={false}>
@@ -261,8 +279,6 @@ class Code extends Component {
     }
 }
 
-const whichFocus = () => {
-
-}
+const whichFocus = () => {};
 
 export default Code;
