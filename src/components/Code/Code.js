@@ -247,7 +247,7 @@ class Code extends Component {
                                 className="equal"
                                 onClick={() => this.expectedEqualToResult()}
                             >
-                                Expected=
+                             =
                             </button>
                             <Tabs
                                 activeKey={activeTab}

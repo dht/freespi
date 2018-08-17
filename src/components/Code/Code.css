@@ -18,13 +18,15 @@
     flex: 1; }
   .Code-container button.equal {
     position: absolute;
-    top: 0;
-    right: 0;
-    width: 100px;
+    bottom: 4px;
+    right: 5px;
+    width: 50px;
     height: 30px;
     border: none;
-    background-color: white;
+    background-color: #333;
+    color: #ddd;
     z-index: 999;
+    font-size: 20px;
     cursor: pointer; }
     .Code-container button.equal:hover {
-      background-color: #eee; }
+      background-color: #444; }

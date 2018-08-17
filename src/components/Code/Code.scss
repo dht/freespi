@@ -1,42 +1,43 @@
 .Code-container {
-  height:100%;
-  display: flex;
-  flex-direction: column;
-
-
-  .row {
-    display: flex;
-    flex-direction: row;
-    flex: 1;
-    padding-top:10px;
-    background-color:#272822;
-    height:93%;
-    box-sizing: border-box;
-  }
-
-  .column {
+    height: 100%;
     display: flex;
     flex-direction: column;
-    flex: 1;
-  }
 
-  .aceContainer {
-    flex:1;
-  }
-
-  button.equal {
-    position:absolute;
-    top:0;
-    right:0;
-    width:100px;
-    height:30px;
-    border:none;
-    background-color:white;
-    z-index: 999;
-    cursor:pointer;
-
-    &:hover {
-      background-color:#eee;
+    .row {
+        display: flex;
+        flex-direction: row;
+        flex: 1;
+        padding-top: 10px;
+        background-color: #272822;
+        height: 93%;
+        box-sizing: border-box;
     }
-  }
+
+    .column {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+    }
+
+    .aceContainer {
+        flex: 1;
+    }
+
+    button.equal {
+        position: absolute;
+        bottom: 4px;
+        right: 5px;
+        width: 50px;
+        height: 30px;
+        border: none;
+        background-color: #333;
+        color: #ddd;
+        z-index: 999;
+        font-size:20px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #444;
+        }
+    }
 }
