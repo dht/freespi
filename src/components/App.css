@@ -13,6 +13,13 @@
     color: #ccc;
     z-index: 99;
     text-align: center; }
+  .App-container .version {
+    position: fixed;
+    top: 0;
+    right: 0;
+    font-size: 8px;
+    color: #ddd;
+    padding: 3px; }
 
 /* width */
 ::-webkit-scrollbar {

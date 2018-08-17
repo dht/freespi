@@ -92,6 +92,9 @@ const ${name} = (${vars.join(', ')}) => {
                     onDelete={this.onDelete}
                     onClose={() => this.setState({showGlobals: false})}
                 />
+                <div className="version">
+                    0.1.0
+                </div>
             </div>
         );
     }
