@@ -37,3 +37,5 @@
   width: 10px;
   background-color: #f3f3f3;
   border-right: 1px solid gray; }
+  .Divider-container.long {
+    flex: 1; }

@@ -4,15 +4,19 @@ import Tester from "../Tester/TesterContainer";
 import Clock from "../Clock/ClockContainer";
 import { Button } from "./Button";
 import { getKeys } from "../../utils/keys";
+import classnames from "classnames";
 
-const Divider = () => <div className="Divider-container" />;
+const Divider = (props) => <div className={classnames("Divider-container", props.className)} />;
 
 class Bar extends Component {
     keydown = ev => {
-        if (ev.keyCode == 83 && (navigator.platform.match("Mac") ? ev.metaKey : ev.ctrlKey)) {
+        if (
+            ev.keyCode == 83 &&
+            (navigator.platform.match("Mac") ? ev.metaKey : ev.ctrlKey)
+        ) {
             ev.preventDefault();
             this.props.save();
-          }
+        }
     };
 
     componentDidMount() {
@@ -23,8 +27,28 @@ class Bar extends Component {
         document.removeEventListener("keydown", this.keydown);
     }
 
+    renderMinimal() {
+        const keys = getKeys();
+
+        return (
+            <div className="Bar-container">
+                <div className="half">
+                    <Button onClick={this.props.run} title={keys.RUN}>
+                        play_arrow
+                    </Button>
+                    <Button onClick={this.props.download}>
+                        cloud_download
+                    </Button>
+                    <Clock />
+                </div>
+            </div>
+        );
+    }
+
     render() {
-        const { autoplay } = this.props;
+        const { autoplay, minimal } = this.props;
+
+        if (minimal) return this.renderMinimal();
 
         const keys = getKeys();
 
@@ -55,16 +79,23 @@ class Bar extends Component {
                     >
                         home
                     </Button>
-                    <Button
-                        onClick={this.props.download}
-                    >
+                    <Divider className="long" />
+                    <Clock />
+                    <Button onClick={this.props.download}>
                         cloud_download
                     </Button>
-                    <Clock />
+                    <Button onClick={this.props.share}>
+                        extension
+                    </Button>            
+                    <Divider />
                 </div>
-                <div className="half space-between"> 
+                <div className="half space-between">
                     <Tester onClick={this.props.loadIO} run={this.props.run} />
-                    <a className="github" href="https://github.com/dht/freespi" target="_blank" />
+                    <a
+                        className="github"
+                        href="https://github.com/dht/freespi"
+                        target="_blank"
+                    />
                 </div>
             </div>
         );

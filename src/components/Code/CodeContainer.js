@@ -38,6 +38,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         setIsRunning: (isRunning) => {
             dispatch(setIsRunning(isRunning));
+        },
+        share: () => {
+            const url = document.location.href;
+            window.open(url + "/run", "_blank")
         }
     }
 }

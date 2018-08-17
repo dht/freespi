@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import './App.css';
 import Code from "./Code/CodeContainer";
+import Runner from './Runner/RunnerContainer';
 import Globals from "./Globals/GlobalsContainer";
 import "animate.css/animate.css";
 
@@ -71,11 +72,14 @@ const ${name} = (${vars.join(', ')}) => {
     }
 
     render() {
-        const {id, showGlobals, method} = this.state;
+        const {id, showGlobals, method} = this.state,
+            view = this._getParam(this.props, "view");
+
+        const Cmp = view === "run" ? Runner : Code;
 
         return (
             <div className="App-container">
-                <Code
+                <Cmp
                     id={id}
                     showGlobals={() => this.setState({showGlobals: true})}
                     onNavigateHome={this.props.onNavigateHome}
@@ -88,7 +92,6 @@ const ${name} = (${vars.join(', ')}) => {
                     onDelete={this.onDelete}
                     onClose={() => this.setState({showGlobals: false})}
                 />
-                <div className="method-name">{method || 'canvas'}</div>
             </div>
         );
     }

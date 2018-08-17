@@ -192,6 +192,8 @@ class Code extends Component {
     };
 
     render() {
+        const {current} = this.props;
+
         const {
             code,
             input,
@@ -215,6 +217,7 @@ class Code extends Component {
                     loadIO={this.props.loadIO}
                     runAll={this.props.runAll}
                     download={this.props.download}
+                    share={this.props.share}
                     autoplay={autoplay}
                     toggleAutoPlay={this.toggleAutoPlay}
                 />
@@ -225,6 +228,8 @@ class Code extends Component {
                             onChange={code => this.setState({ code })}
                             focus={focusedAce === 1}
                             onFocus={() => this.focus(1)}
+                            label={"code"}
+                            current={current}
                         />
                     </div>
                     <div className="column">
@@ -234,6 +239,7 @@ class Code extends Component {
                             height={height / 2}
                             focus={focusedAce === 2}
                             onFocus={() => this.focus(2)}
+                            label={"input"}
                         />
 
                         <div
@@ -259,7 +265,7 @@ class Code extends Component {
                                     this.setState({ activeTab: key })
                                 }
                             >
-                                <TabPane tab="result" key="1">
+                                <TabPane tab="output" key="1">
                                     <Ace
                                         value={output}
                                         onChange={output =>
@@ -268,6 +274,7 @@ class Code extends Component {
                                         height={height / 2}
                                         focus={focusedAce === 3}
                                         onFocus={() => this.focus(3)}
+                                        label={"output"}
                                     />
                                 </TabPane>
                                 <TabPane
@@ -283,6 +290,7 @@ class Code extends Component {
                                         height={height / 2}
                                         focus={focusedAce === 4}
                                         onFocus={() => this.focus(4)}
+                                        label={"expected"}
                                     />
                                 </TabPane>
                                 <TabPane tab="diff" key="3" disabled={false}>

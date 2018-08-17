@@ -35,7 +35,8 @@ ReactDOM.render(<Provider store={store}>
         <Route exact path="/" component={CreateNew}/>
         {/*<Route exact path="/diff" component={DiffExample}/>*/}
         <Route exact path="/:codeId/" component={ToCanvas}/>
-        <Route path="/:codeId/:method" component={App}/>
+        <Route exact path="/:codeId/:method" component={App}/>
+        <Route exact path="/:codeId/:method/:view" component={App}/>
         </div>
     </Router>
     </Provider>
