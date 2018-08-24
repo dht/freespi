@@ -201,3 +201,10 @@ export const downloadCode = (filename, text) => {
 
     document.body.removeChild(element);
 };
+
+export const paramsToInput = (params) => {
+    return Object.keys(params).reduce((output, key) => {
+        const param = params[key];
+        return output +  `const ${key} = ` +  JSON.stringify(param, null, 4) + ";\n";
+    }, "");
+};

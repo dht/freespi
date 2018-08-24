@@ -19,7 +19,17 @@ const Modes = {
 
 export class UML extends Component {
     state = {
-        mode: Modes.IO
+        mode: Modes.SPLIT
+    };
+
+    onClickIO = (name, params) => {
+        const ok = window.confirm("generate a new IO for this run?");
+
+        if (ok) {
+            this.props.generateIO(name, params).then((id) => {
+                alert(`IO #${id} was created`);
+            });
+        }
     };
 
     renderInner() {
@@ -31,7 +41,11 @@ export class UML extends Component {
                 {isTimeline ? (
                     <UMLTimeline {...this.props} />
                 ) : (
-                    <UMLTables {...this.props} isIO={mode === Modes.IO} />
+                    <UMLTables
+                        {...this.props}
+                        isIO={mode === Modes.IO}
+                        onClickIO={this.onClickIO}
+                    />
                 )}
             </div>
         );
@@ -44,25 +58,23 @@ export class UML extends Component {
             <ReactModal
                 ariaHideApp={false}
                 isOpen={show}
-                onRequestClose={this.props.onClose}
-            >
+                onRequestClose={this.props.onClose}>
                 <div className="UML-container">
                     <div className="bar">
                         <Button
-                            onClick={() => this.setState({ mode: Modes.IO })}
-                        >
-                            view_stream
+                            onClick={() =>
+                                this.setState({ mode: Modes.SPLIT })
+                            }>
+                            view_day
                         </Button>
                         <Button
-                            onClick={() => this.setState({ mode: Modes.SPLIT })}
-                        >
-                            view_day
+                            onClick={() => this.setState({ mode: Modes.IO })}>
+                            view_stream
                         </Button>
                         <Button
                             onClick={() =>
                                 this.setState({ mode: Modes.TIMELINE })
-                            }
-                        >
+                            }>
                             view_carousel
                         </Button>
                     </div>

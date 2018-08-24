@@ -195,3 +195,24 @@ export const removeIO = () => {
         api.removeIO(current, currentIO);
     };
 };
+
+export const generateIO = (name, params) => {
+    return (dispatch, getState) => {
+        const state = getState(),
+            methods = selectors.methodsSelector(state);
+
+        const IOs = methods[name].IOs || {};
+
+        const lastKey = Object.keys(IOs).reduce((output, key) => {
+            return Math.max(output, key);
+        }, 0);
+
+        const nextKey = lastKey + 1;
+
+        const input = coder.paramsToInput(params);
+        dispatch(actions.updateIO(name, nextKey, {input, expected: " "}));
+        api.saveIO(name, nextKey, {input, expected: " "});
+
+        return Promise.resolve(nextKey);
+    };
+};

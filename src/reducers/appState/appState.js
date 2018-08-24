@@ -86,7 +86,7 @@ export const IOs = (state = {}, action) => {
     }
 };
 
-const method = (state, action) => {
+const method = (state = {}, action) => {
     switch (action.type) {
         case ActionTypes.UPDATE_METHOD:
             return {

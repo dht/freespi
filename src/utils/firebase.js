@@ -105,6 +105,13 @@ export const removeIO = (methodId, ioId) => {
     return refIOs.child(ioId).remove();
 };
 
+export const saveIO = (methodId, ioId, value) => {
+    const ref = methodsRef.child(methodId),
+        refIO = ref.child("IOs").child(ioId);
+
+    return refIO.update(value);
+};
+
 export const reset_ = () => {
     const ref = methodsRef.child("_"),
         refIOs = ref.child("IOs");

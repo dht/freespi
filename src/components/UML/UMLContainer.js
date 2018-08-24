@@ -17,6 +17,9 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
+        generateIO: (name, params) => {
+            return dispatch(thunks.generateIO(name, params));
+        }
     };
 };
 

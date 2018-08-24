@@ -4,7 +4,7 @@ import "./UML.css";
 const logIt = log => {
     let newLog = log;
     console.clear();
-    const { params = {}, output } = log; 
+    const { params = {}, output } = log;
     const keys = Object.keys(params);
 
     // only a single param
@@ -23,10 +23,16 @@ const logIt = log => {
 };
 
 const IO = props => {
-    const { id, log, run } = props;
+    const { name, id, log, run } = props;
 
     return (
-        <li key={id} onMouseOver={() => logIt(log)}>
+        <li
+            key={id}
+            onMouseOver={() => logIt(log)}
+            onClick={ev => {
+                ev.preventDefault();
+                props.onClickIO(name, log);
+            }}>
             {run}
         </li>
     );
@@ -43,13 +49,24 @@ const Box = props => {
         <div className="box">
             <ul className="inputs">
                 {inputsSorted.map(log => (
-                    <IO id={log.id} log={log.inputs} run={log.run} />
+                    <IO
+                        id={log.id}
+                        name={log.name}
+                        log={log.inputs}
+                        run={log.run}
+                        onClickIO={props.onClickIO}
+                    />
                 ))}
             </ul>
             <div className="title">{id}</div>
             <ul className="outputs">
                 {outputSorted.map(log => (
-                    <IO id={log.id} log={log.result} run={log.run} />
+                    <IO
+                        id={log.id}
+                        name={log.name}
+                        log={log.result}
+                        run={log.run}
+                    />
                 ))}
             </ul>
         </div>
@@ -71,9 +88,11 @@ const BoxSimple = props => {
                 {keys.map(runId => (
                     <IO
                         id={runId}
+                        name={runs[runId].name}
+                        onClickIO={props.onClickIO}
                         log={{
                             params: runs[runId].input,
-                            output: runs[runId].output
+                            output: runs[runId].output,
                         }}
                         run={runId}
                     />
@@ -90,9 +109,14 @@ export class UMLTables extends Component {
         const { isIO } = this.props;
 
         return isIO ? (
-            <BoxSimple key={key} id={id} log={log} />
+            <BoxSimple
+                key={key}
+                id={id}
+                log={log}
+                onClickIO={this.props.onClickIO}
+            />
         ) : (
-            <Box key={key} id={id} log={log} />
+            <Box key={key} id={id} log={log} onClickIO={this.props.onClickIO} />
         );
     }
 
