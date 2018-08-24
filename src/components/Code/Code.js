@@ -20,20 +20,23 @@ class Code extends Component {
         width: window.innerWidth,
         height: window.innerHeight,
         focusedAce: 1,
-        activeTab: "1"
+        activeTab: "1",
+        isDirty: false
     };
 
     componentWillReceiveProps(props) {
-        const { code, input, output, expected, isDirty } = props;
+        const { code, input, output, expected } = props;
 
+        
+        
         if (
             code !== this.state.code ||
             input !== this.state.input ||
             output !== this.state.output ||
-            expected !== this.state.expected ||
-            isDirty !== this.state.isDirty
+            expected !== this.state.expected
         ) {
-            this.setState({ code, input, output, expected, isDirty });
+            console.log('code, input, output, expected ->', code, input, output, expected);
+            this.setState({ code, input, output, expected, isDirty: false });
         }
     }
 
@@ -135,7 +138,7 @@ class Code extends Component {
         const result = await runCode(input, code, globals);
         this.props.setIsRunning(false);
 
-        this.setState({ output: result.output, isPromise: result.isPromise });
+        this.setState({ output: result.output, isPromise: result.isPromise , isDirty: false});
 
         this.props.setCode({
             code,
@@ -214,9 +217,9 @@ class Code extends Component {
         this.setState(value);
 
         if (value.code) {
-            this.props.setDirty(true);
+            this.setState({isDirty: true});
         } else {
-            this.props.setDirty(false);
+            this.props.setDirty();
         }
     };
 

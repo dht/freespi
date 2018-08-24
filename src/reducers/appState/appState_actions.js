@@ -75,13 +75,6 @@ export const resetMethod = (id) => {
     }
 }
 
-export const setIsDirty = (value) => {
-    return {
-        type: ActionTypes.SET_IS_DIRTY,
-        value
-    }
-}
-
 export const updateIO = (id, IO_id, value) => {
 
     return {

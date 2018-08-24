@@ -8,6 +8,7 @@ export const currentSelector = state => state.appState.current
 export const currentIOSelector = state => state.appState.currentIO
 export const methodsSelector = state => state.appState.methods || {};
 export const isOfflineSelector = state => state.appState.isOffline;
+export const isDirtySelector = state => state.appState.isDirty;
 
 export const sortedMethodsSelector = createSelector(
     methodsSelector,
@@ -34,11 +35,6 @@ export const IOSelector = createSelector(
 export const codeSelector = createSelector(
     methodSelector,
     (method) => method.code
-)
-
-export const isDirtySelector = createSelector(
-    methodSelector,
-    (method) => method.isDirty
 )
 
 export const fourSelector = createSelector(

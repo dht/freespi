@@ -36,12 +36,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         download: () => {
             dispatch(thunks.download());
         },
-        setDirty: isCode => {
-            if (isCode) {
-                dispatch(thunks.setIsDirtyCode(true));
-            } else {
-                dispatch(thunks.setIsDirtyIO(true));
-            }
+        setDirty: () => {
+            dispatch(thunks.setIsDirtyIO(true));
         },
         setIsRunning: isRunning => {
             dispatch(actions.setIsRunning(isRunning));

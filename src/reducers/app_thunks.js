@@ -58,7 +58,7 @@ export const autosave = () => {
             });
         }
 
-        dispatch(setIsDirtyCode(false));
+        // dispatch(actions.setIsDirty(false));
         dispatch(setIsDirtyIO(false));
     };
 };
@@ -74,7 +74,7 @@ export const save = () => {
 
         api.updateMethods(data);
 
-        dispatch(setIsDirtyCode(false));
+        // dispatch(actions.setIsDirty(false));
         dispatch(setIsDirtyIO(false));
     };
 };
@@ -157,18 +157,6 @@ export const toggleOffline = () => {
             dispatch(actions.setIsOffline(false));
             storage.setIsOffline(false);
         }
-    };
-};
-
-export const setIsDirtyCode = isDirty => {
-    return (dispatch, getState) => {
-        const state = getState(),
-            data = selectors.fourSelector(state),
-            { current } = data;
-
-        if (isDirty === data.isDirty) return;
-
-        dispatch(actions.updateMethod(current, { isDirty }));
     };
 };
 

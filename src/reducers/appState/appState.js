@@ -4,7 +4,6 @@ export const initialState = {
     id: null,
     isLoading: false,
     isRunning: false,
-    isDirty: false,
     isOffline: storage.getIsOffline(),
     current: "_",
     currentIO: "1",
@@ -30,7 +29,6 @@ export const ActionTypes = {
     SET_IS_LOADING: "SET_IS_LOADING",
     SET_IS_RUNNING: "SET_IS_RUNNING",
     SET_IS_OFFLINE: "SET_IS_OFFLINE",
-    SET_IS_DIRTY: "SET_IS_DIRTY",
     RESET_WORKSPACE: "RESET_WORKSPACE",
     SET_CURRENT: "SET_CURRENT",
     SET_CURRENT_IO: "SET_CURRENT_IO",
@@ -153,12 +151,6 @@ const appState = (state = initialState, action) => {
             return {
                 ...state,
                 isRunning: action.value
-            };
-
-        case ActionTypes.SET_IS_DIRTY:
-            return {
-                ...state,
-                isDirty: action.value
             };
 
         case ActionTypes.SET_IS_OFFLINE:
