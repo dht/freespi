@@ -33,13 +33,6 @@ class Code extends Component {
             output !== this.state.output ||
             expected !== this.state.expected
         ) {
-            console.log(
-                "code, input, output, expected ->",
-                code,
-                input,
-                output,
-                expected
-            );
             this.setState({ code, input, output, expected, isDirty: false });
         }
     }
