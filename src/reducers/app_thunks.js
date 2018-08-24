@@ -167,7 +167,7 @@ export const setIsDirtyIO = isDirty => {
             IO = selectors.IOSelector(state),
             { current, currentIO } = data;
 
-        if (isDirty === IO.isDirty) return;
+        if (!IO || isDirty === IO.isDirty) return;
 
         dispatch(actions.updateIO(current, currentIO, { isDirty }));
     };
@@ -179,10 +179,19 @@ export const setIsDirtyAllIOs = isDirty => {
             IOs = selectors.IOsSelector(state),
             current = selectors.currentSelector(state);
 
-        console.log("data ->", current, IOs);
-
         Object.keys(IOs).forEach(key => {
             dispatch(actions.updateIO(current, key, { isDirty }));
         });
+    };
+};
+
+export const removeIO = () => {
+    return (dispatch, getState) => {
+        const state = getState(),
+            data = selectors.fourSelector(state),
+            { current, currentIO } = data;
+
+        dispatch(actions.removeIO(current, currentIO));
+        api.removeIO(current, currentIO);
     };
 };

@@ -27,15 +27,19 @@ class Code extends Component {
     componentWillReceiveProps(props) {
         const { code, input, output, expected } = props;
 
-        
-        
         if (
             code !== this.state.code ||
             input !== this.state.input ||
             output !== this.state.output ||
             expected !== this.state.expected
         ) {
-            console.log('code, input, output, expected ->', code, input, output, expected);
+            console.log(
+                "code, input, output, expected ->",
+                code,
+                input,
+                output,
+                expected
+            );
             this.setState({ code, input, output, expected, isDirty: false });
         }
     }
@@ -138,7 +142,11 @@ class Code extends Component {
         const result = await runCode(input, code, globals);
         this.props.setIsRunning(false);
 
-        this.setState({ output: result.output, isPromise: result.isPromise , isDirty: false});
+        this.setState({
+            output: result.output,
+            isPromise: result.isPromise,
+            isDirty: false
+        });
 
         this.props.setCode({
             code,
@@ -148,7 +156,7 @@ class Code extends Component {
             isPromise: result.isPromise
         });
 
-        this.props.save();        
+        this.props.save();
     };
 
     save = () => {
@@ -217,11 +225,19 @@ class Code extends Component {
         this.setState(value);
 
         if (value.code) {
-            this.setState({isDirty: true});
+            this.setState({ isDirty: true });
         } else {
             this.props.setDirty();
         }
     };
+
+    deleteIO() {
+        const yes = window.confirm("delete this IO?");
+
+        if (yes) {
+            this.props.removeIO();
+        }
+    }
 
     render() {
         const { current } = this.props;
@@ -287,10 +303,19 @@ class Code extends Component {
                                 position: "relative"
                             }}>
                             <button
+                                className="delete"
+                                onClick={() => this.deleteIO()}>
+                                 <i className="material-icons">
+                                    delete
+                                </i>
+                            </button>
+
+                            <button
                                 className="equal"
                                 onClick={() => this.expectedEqualToResult()}>
-                                =
+                               =
                             </button>
+
                             <Tabs
                                 activeKey={activeTab}
                                 defaultActiveKey="1"

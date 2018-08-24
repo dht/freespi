@@ -37,7 +37,8 @@ export const ActionTypes = {
     REMOVE_METHOD: "REMOVE_METHOD",
     RESET_METHOD: "RESET_METHOD",
     UPDATE_IO: "UPDATE_IO",
-    SET_IOS: "SET_IOS"
+    SET_IOS: "SET_IOS",
+    REMOVE_IO: "REMOVE_IO"
 };
 
 export const IO = (state = {}, action) => {
@@ -54,6 +55,8 @@ export const IO = (state = {}, action) => {
 };
 
 export const IOs = (state = {}, action) => {
+    let newState;
+
     switch (action.type) {
         case ActionTypes.SET_IOS:
             return action.value;
@@ -72,6 +75,11 @@ export const IOs = (state = {}, action) => {
                     expected: "5"
                 }
             };
+
+        case ActionTypes.REMOVE_IO:
+            newState = { ...state };
+            delete newState[action.index];
+            return newState;
 
         default:
             return state;
@@ -102,6 +110,7 @@ const method = (state, action) => {
 
         case ActionTypes.SET_IOS:
         case ActionTypes.UPDATE_IO:
+        case ActionTypes.REMOVE_IO:
             return {
                 ...state,
                 IOs: IOs(state.IOs, action)
@@ -121,6 +130,7 @@ const methods = (state, action) => {
         case ActionTypes.SET_IOS:
         case ActionTypes.UPDATE_IO:
         case ActionTypes.UPDATE_METHOD:
+        case ActionTypes.REMOVE_IO:
             return {
                 ...state,
                 [action.id]: method(state[action.id], action)
@@ -177,6 +187,7 @@ const appState = (state = initialState, action) => {
         case ActionTypes.UPDATE_IO:
         case ActionTypes.SET_IOS:
         case ActionTypes.UPDATE_METHOD:
+        case ActionTypes.REMOVE_IO:
             return {
                 ...state,
                 methods: methods(state.methods, action)

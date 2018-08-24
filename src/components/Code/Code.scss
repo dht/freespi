@@ -23,7 +23,7 @@
         flex: 1;
     }
 
-    button.equal {
+    button.equal, button.delete {
         position: absolute;
         bottom: 4px;
         right: 5px;
@@ -35,9 +35,27 @@
         z-index: 999;
         font-size:20px;
         cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
         &:hover {
             background-color: #444;
+        }
+    }
+
+    button.delete {
+        right:65px;
+
+        i {
+            font-size:18px;
+            color:#666;
+        }
+
+        &:hover {
+            i {
+                color:#ccc;
+            }
         }
     }
 }

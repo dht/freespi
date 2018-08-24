@@ -45,6 +45,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         share: () => {
             const url = document.location.href;
             window.open(url + "/run", "_blank");
+        },
+        removeIO: () => {
+            dispatch(thunks.removeIO());
         }
     };
 };

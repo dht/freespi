@@ -98,6 +98,13 @@ export const saveIOs = (toId, IOs) => {
     return refIOs.set(IOs);
 };
 
+export const removeIO = (methodId, ioId) => {
+    const ref = methodsRef.child(methodId),
+        refIOs = ref.child("IOs");
+
+    return refIOs.child(ioId).remove();
+};
+
 export const reset_ = () => {
     const ref = methodsRef.child("_"),
         refIOs = ref.child("IOs");

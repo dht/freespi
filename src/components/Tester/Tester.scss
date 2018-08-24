@@ -1,76 +1,87 @@
 .Tester-container {
-  display: flex;
-  border-left:1px solid gray;
-
-  .tests {
     display: flex;
-    overflow:hidden;
-    max-width:510px;
-    flex-wrap: nowrap;
-  }
+    border-left: 1px solid gray;
+    border-bottom: 1px solid #ccc;
 
-  .box {
-    min-width: 50px;
-    display:flex;
-    align-items: center;
-    justify-content: center;
-    border-right: 1px solid gray;
-    cursor: pointer;
-    position: relative;
-    color:#ccc;
-
-    .popoi {
-      position:absolute;
-      bottom:3px;
-      right:3px;
-      width:6px;
-      height:6px;
-      border-radius: 6px;
-      background-color:transparent;
+    .tests {
+        display: flex;
+        overflow: hidden;
+        max-width: 510px;
+        flex-wrap: nowrap;
     }
 
-    .dirty-popoi {
-      position:absolute;
-      bottom:7px;
-      left:3px;
-      width:6px;
-      height:6px;
-      border-radius: 6px;
-      background-color:transparent;
-      font-size:12px;
-      color:gray;
-      display:none;
-    }
+    .box {
+        min-width: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-right: 1px solid gray;
+        cursor: pointer;
+        position: relative;
+        color: #ccc;
 
-    &:hover {
-      background-color:#eee;
-    }
+        .popoi {
+            position: absolute;
+            bottom: 3px;
+            right: 3px;
+            width: 6px;
+            height: 6px;
+            border-radius: 6px;
+            background-color: #ddd;
+            border: 1px solid #ddd;
+        }
 
-    &.selected {
-      background-color: #eee;
-    }
+        .dirty-popoi {
+            position: absolute;
+            bottom: 7px;
+            left: 3px;
+            width: 6px;
+            height: 6px;
+            border-radius: 6px;
+            background-color: transparent;
+            font-size: 12px;
+            color: gray;
+            display: none;
+        }
 
-    &.active {
-      color: #333;
-    }
+        &:hover {
+            background-color: #eee;
+        }
 
-    &.ok {
-      .popoi {
-        background-color:green;
-      }
-    }
+        &.active {
+            color: #333;
+        }
 
-    &.failing {
-      .popoi {
-        background-color:red;
-      }
-    }
+        &.selected {
+            background-color: lighten(olivedrab, 30%);
 
-    &.dirty {
-      .dirty-popoi {
-        display:block;
-      }
-    }
+            &.active {
+                background-color: olivedrab;
+            }
 
-  }
+            color: white;
+
+            .dirty-popoi {
+                color: white;
+            }
+        }
+
+        &.ok {
+            .popoi {
+                background-color: green;
+            }
+        }
+
+        &.failing {
+            .popoi {
+                background-color: red;
+            }
+        }
+
+        &.dirty {
+            .dirty-popoi {
+                display: block;
+            }
+        }
+    }
 }

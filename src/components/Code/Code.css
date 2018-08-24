@@ -16,7 +16,7 @@
     flex: 1; }
   .Code-container .aceContainer {
     flex: 1; }
-  .Code-container button.equal {
+  .Code-container button.equal, .Code-container button.delete {
     position: absolute;
     bottom: 4px;
     right: 5px;
@@ -27,6 +27,16 @@
     color: #ddd;
     z-index: 999;
     font-size: 20px;
-    cursor: pointer; }
-    .Code-container button.equal:hover {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center; }
+    .Code-container button.equal:hover, .Code-container button.delete:hover {
       background-color: #444; }
+  .Code-container button.delete {
+    right: 65px; }
+    .Code-container button.delete i {
+      font-size: 18px;
+      color: #666; }
+    .Code-container button.delete:hover i {
+      color: #ccc; }

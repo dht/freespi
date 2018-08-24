@@ -85,6 +85,15 @@ export const updateIO = (id, IO_id, value) => {
     }
 }
 
+export const removeIO = (id, IO_id) => {
+
+    return {
+        type: ActionTypes.REMOVE_IO,
+        id,
+        index: IO_id,
+    }
+}
+
 export const setIOs = (id, value) => {
 
     return {

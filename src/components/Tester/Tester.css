@@ -1,6 +1,7 @@
 .Tester-container {
   display: flex;
-  border-left: 1px solid gray; }
+  border-left: 1px solid gray;
+  border-bottom: 1px solid #ccc; }
   .Tester-container .tests {
     display: flex;
     overflow: hidden;
@@ -22,7 +23,8 @@
       width: 6px;
       height: 6px;
       border-radius: 6px;
-      background-color: transparent; }
+      background-color: #ddd;
+      border: 1px solid #ddd; }
     .Tester-container .box .dirty-popoi {
       position: absolute;
       bottom: 7px;
@@ -36,10 +38,15 @@
       display: none; }
     .Tester-container .box:hover {
       background-color: #eee; }
-    .Tester-container .box.selected {
-      background-color: #eee; }
     .Tester-container .box.active {
       color: #333; }
+    .Tester-container .box.selected {
+      background-color: #b8db6f;
+      color: white; }
+      .Tester-container .box.selected.active {
+        background-color: olivedrab; }
+      .Tester-container .box.selected .dirty-popoi {
+        color: white; }
     .Tester-container .box.ok .popoi {
       background-color: green; }
     .Tester-container .box.failing .popoi {
