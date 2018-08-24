@@ -166,6 +166,8 @@ export const setIsDirtyCode = isDirty => {
             data = selectors.fourSelector(state),
             { current } = data;
 
+        if (isDirty === data.isDirty) return;
+
         dispatch(actions.updateMethod(current, { isDirty }));
     };
 };
@@ -174,7 +176,10 @@ export const setIsDirtyIO = isDirty => {
     return (dispatch, getState) => {
         const state = getState(),
             data = selectors.fourSelector(state),
+            IO = selectors.IOSelector(state),
             { current, currentIO } = data;
+
+        if (isDirty === IO.isDirty) return;
 
         dispatch(actions.updateIO(current, currentIO, { isDirty }));
     };
@@ -190,6 +195,6 @@ export const setIsDirtyAllIOs = isDirty => {
 
         Object.keys(IOs).forEach(key => {
             dispatch(actions.updateIO(current, key, { isDirty }));
-        })
+        });
     };
 };
