@@ -32,7 +32,7 @@ export const loadApp = (id, current, currentIO) => {
             } else {
                 // console.log('data', data);
                 data["current"] = current;
-                data["currentIO"] = currentIO;
+                data["currentIO"] = parseInt(currentIO, 10);
                 dispatch(actions.setWorkspace(data));
             }
         });

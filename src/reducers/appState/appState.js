@@ -6,7 +6,7 @@ export const initialState = {
     isRunning: false,
     isOffline: storage.getIsOffline(),
     current: "_",
-    currentIO: "1",
+    currentIO: 1,
     methods: {
         _: {
             id: "_",
