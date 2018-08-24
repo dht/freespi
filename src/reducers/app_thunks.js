@@ -1,7 +1,7 @@
 import * as api from "../utils/firebase";
 import * as actions from "./appState/appState_actions";
 import * as selectors from "../selectors/selectors";
-import { methodsToGlobal, runCode, downloadCode } from "../utils/code";
+import * as coder from "../utils/code";
 import * as storage from "../utils/storage";
 
 export const loadApp = (id, current, currentIO) => {
@@ -57,6 +57,25 @@ export const autosave = () => {
                 expected
             });
         }
+
+        dispatch(setIsDirtyCode(false));
+        dispatch(setIsDirtyIO(false));
+    };
+};
+
+export const save = () => {
+    const isOffline = storage.getIsOffline();
+
+    return (dispatch, getState) => {
+        if (isOffline) return;
+
+        const state = getState(),
+            data = selectors.methodsSelector(state);
+
+        api.updateMethods(data);
+
+        dispatch(setIsDirtyCode(false));
+        dispatch(setIsDirtyIO(false));
     };
 };
 
@@ -90,7 +109,7 @@ export const runAll = () => {
             methods = selectors.methodsSelector(state),
             code = selectors.codeSelector(state);
 
-        const globals = methodsToGlobal(methods);
+        const globals = coder.methodsToGlobal(methods);
 
         // console.log('IOs', current, IOs);
 
@@ -101,7 +120,7 @@ export const runAll = () => {
                 { input } = IO || {};
 
             if (input) {
-                const result = await runCode(input, code, globals);
+                const result = await coder.runCode(input, code, globals);
 
                 if (result.ok) {
                     IO.output = result.output;
@@ -110,6 +129,7 @@ export const runAll = () => {
         });
 
         dispatch(actions.setIOs(current, IOs));
+        dispatch(setIsDirtyAllIOs(false));
         api.saveIOs(current, IOs);
     };
 };
@@ -120,7 +140,7 @@ export const download = () => {
             data = selectors.fourSelector(state),
             { globals } = data;
 
-        downloadCode("code.txt", globals);
+        coder.downloadCode("code.txt", globals);
     };
 };
 
@@ -137,5 +157,39 @@ export const toggleOffline = () => {
             dispatch(actions.setIsOffline(false));
             storage.setIsOffline(false);
         }
+    };
+};
+
+export const setIsDirtyCode = isDirty => {
+    return (dispatch, getState) => {
+        const state = getState(),
+            data = selectors.fourSelector(state),
+            { current } = data;
+
+        dispatch(actions.updateMethod(current, { isDirty }));
+    };
+};
+
+export const setIsDirtyIO = isDirty => {
+    return (dispatch, getState) => {
+        const state = getState(),
+            data = selectors.fourSelector(state),
+            { current, currentIO } = data;
+
+        dispatch(actions.updateIO(current, currentIO, { isDirty }));
+    };
+};
+
+export const setIsDirtyAllIOs = isDirty => {
+    return (dispatch, getState) => {
+        const state = getState(),
+            IOs = selectors.IOsSelector(state),
+            current = selectors.currentSelector(state);
+
+        console.log("data ->", current, IOs);
+
+        Object.keys(IOs).forEach(key => {
+            dispatch(actions.updateIO(current, key, { isDirty }));
+        })
     };
 };

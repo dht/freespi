@@ -4,6 +4,7 @@ export const initialState = {
     id: null,
     isLoading: false,
     isRunning: false,
+    isDirty: false,
     isOffline: storage.getIsOffline(),
     current: "_",
     currentIO: "1",
@@ -11,11 +12,13 @@ export const initialState = {
         _: {
             id: "_",
             code: "return input;",
+            isDirty: true,
             IOs: {
                 "1": {
                     input: "const input = 5;",
                     output: "5",
-                    expected: "5"
+                    expected: "5",
+                    isDirty: true
                 }
             }
         }
@@ -27,10 +30,12 @@ export const ActionTypes = {
     SET_IS_LOADING: "SET_IS_LOADING",
     SET_IS_RUNNING: "SET_IS_RUNNING",
     SET_IS_OFFLINE: "SET_IS_OFFLINE",
+    SET_IS_DIRTY: "SET_IS_DIRTY",
     RESET_WORKSPACE: "RESET_WORKSPACE",
     SET_CURRENT: "SET_CURRENT",
     SET_CURRENT_IO: "SET_CURRENT_IO",
     UPDATE_CODE: "UPDATE_CODE",
+    UPDATE_METHOD: "UPDATE_METHOD",
     REMOVE_METHOD: "REMOVE_METHOD",
     RESET_METHOD: "RESET_METHOD",
     UPDATE_IO: "UPDATE_IO",
@@ -77,6 +82,11 @@ export const IOs = (state = {}, action) => {
 
 const method = (state, action) => {
     switch (action.type) {
+        case ActionTypes.UPDATE_METHOD:
+            return {
+                ...state,
+                ...action.value
+            };
         case ActionTypes.UPDATE_CODE:
             return {
                 ...state,
@@ -112,6 +122,7 @@ const methods = (state, action) => {
         case ActionTypes.RESET_METHOD:
         case ActionTypes.SET_IOS:
         case ActionTypes.UPDATE_IO:
+        case ActionTypes.UPDATE_METHOD:
             return {
                 ...state,
                 [action.id]: method(state[action.id], action)
@@ -126,7 +137,6 @@ const methods = (state, action) => {
             return state;
     }
 };
-
 
 const appState = (state = initialState, action) => {
     switch (action.type) {
@@ -143,6 +153,12 @@ const appState = (state = initialState, action) => {
             return {
                 ...state,
                 isRunning: action.value
+            };
+
+        case ActionTypes.SET_IS_DIRTY:
+            return {
+                ...state,
+                isDirty: action.value
             };
 
         case ActionTypes.SET_IS_OFFLINE:
@@ -168,6 +184,7 @@ const appState = (state = initialState, action) => {
         case ActionTypes.RESET_METHOD:
         case ActionTypes.UPDATE_IO:
         case ActionTypes.SET_IOS:
+        case ActionTypes.UPDATE_METHOD:
             return {
                 ...state,
                 methods: methods(state.methods, action)

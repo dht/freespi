@@ -56,6 +56,7 @@ export const Ace = props => {
                 highlightActiveLine={true}
                 value={props.value}
                 onFocus={props.onFocus}
+                onBlur={props.onBlur}
                 focus={props.focus}
                 style={{ flex: 1, width: "100%", height: props.height }}
                 setOptions={{

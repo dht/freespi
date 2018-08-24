@@ -36,14 +36,20 @@ export const codeSelector = createSelector(
     (method) => method.code
 )
 
+export const isDirtySelector = createSelector(
+    methodSelector,
+    (method) => method.isDirty
+)
+
 export const fourSelector = createSelector(
     currentSelector,
     currentIOSelector,
     codeSelector,
     IOSelector,
     methodsSelector,
+    isDirtySelector,
     isLoadingSelector,
-    (current, currentIO, code, IO, methods, isLoading) => {
+    (current, currentIO, code, IO, methods, isDirty, isLoading) => {
         let {input, output, expected} = IO || {};
 
         const globals = methodsToGlobal(methods)
@@ -57,6 +63,7 @@ export const fourSelector = createSelector(
             expected,
             isLoading,
             globals,
+            isDirty,
         }
     }
 )

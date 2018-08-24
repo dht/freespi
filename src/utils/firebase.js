@@ -1,6 +1,6 @@
 import firebase from "firebase/app";
 import "firebase/auth";
-import  "firebase/database";
+import "firebase/database";
 
 const config = {
     apiKey: "AIzaSyD99j8D124StULlW9rS-8xxzNT5D_L1KhQ",
@@ -27,6 +27,19 @@ const getRef = ref => {
             resolve(snapshot.val());
         });
     });
+};
+
+const removeEmpty = (obj) =>
+  Object.keys(obj)
+    .filter(k => obj[k] !== null && obj[k] !== undefined)  // Remove undef. and null.
+    .reduce((newObj, k) =>
+      typeof obj[k] === 'object' ?
+        Object.assign(newObj, {[k]: removeEmpty(obj[k])}) :  // Recurse.
+        Object.assign(newObj, {[k]: obj[k]}),  // Copy value.
+      {});
+
+export const updateMethods = methods => {
+    methodsRef.update(removeEmpty(methods));
 };
 
 export const getWorkspace = () => {

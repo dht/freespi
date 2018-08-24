@@ -24,15 +24,16 @@ class Code extends Component {
     };
 
     componentWillReceiveProps(props) {
-        const { code, input, output, expected } = props;
+        const { code, input, output, expected, isDirty } = props;
 
         if (
             code !== this.state.code ||
             input !== this.state.input ||
             output !== this.state.output ||
-            expected !== this.state.expected
+            expected !== this.state.expected ||
+            isDirty !== this.state.isDirty
         ) {
-            this.setState({ code, input, output, expected });
+            this.setState({ code, input, output, expected, isDirty });
         }
     }
 
@@ -143,6 +144,8 @@ class Code extends Component {
             expected,
             isPromise: result.isPromise
         });
+
+        this.props.save();        
     };
 
     save = () => {
@@ -196,8 +199,29 @@ class Code extends Component {
         }, 1000);
     };
 
+    onBlur = id => {
+        let { code, input, expected, output } = this.state;
+
+        this.props.setCode({
+            code,
+            input,
+            expected,
+            output
+        });
+    };
+
+    set = value => {
+        this.setState(value);
+
+        if (value.code) {
+            this.props.setDirty(true);
+        } else {
+            this.props.setDirty(false);
+        }
+    };
+
     render() {
-        const {current} = this.props;
+        const { current } = this.props;
 
         const {
             code,
@@ -207,10 +231,13 @@ class Code extends Component {
             width,
             autoplay,
             focusedAce,
-            activeTab
+            activeTab,
+            isDirty
         } = this.state;
 
         let height = this.state.height - 100;
+
+        const label = isDirty ? "code*" : "code";
 
         return (
             <div className="Code-container">
@@ -231,20 +258,22 @@ class Code extends Component {
                     <div className="column">
                         <Ace
                             value={code}
-                            onChange={code => this.setState({ code })}
+                            onChange={code => this.set({ code })}
                             focus={focusedAce === 1}
                             onFocus={() => this.focus(1)}
-                            label={"code"}
+                            label={label}
                             current={current}
+                            onBlur={() => this.onBlur(1)}
                         />
                     </div>
                     <div className="column">
                         <Ace
                             value={input}
-                            onChange={input => this.setState({ input })}
+                            onChange={input => this.set({ input })}
                             height={height / 2}
                             focus={focusedAce === 2}
                             onFocus={() => this.focus(2)}
+                            onBlur={() => this.onBlur(2)}
                             label={"input"}
                         />
 
@@ -253,13 +282,11 @@ class Code extends Component {
                                 maxWidth: width / 2,
                                 color: "#ccc",
                                 position: "relative"
-                            }}
-                        >
+                            }}>
                             <button
                                 className="equal"
-                                onClick={() => this.expectedEqualToResult()}
-                            >
-                             =
+                                onClick={() => this.expectedEqualToResult()}>
+                                =
                             </button>
                             <Tabs
                                 activeKey={activeTab}
@@ -269,33 +296,33 @@ class Code extends Component {
                                 tabBarPosition={"bottom"}
                                 onChange={key =>
                                     this.setState({ activeTab: key })
-                                }
-                            >
+                                }>
                                 <TabPane tab="output" key="1">
                                     <Ace
                                         value={output}
                                         onChange={output =>
-                                            this.setState({ output })
+                                            this.set({ output })
                                         }
                                         height={height / 2}
                                         focus={focusedAce === 3}
                                         onFocus={() => this.focus(3)}
+                                        onBlur={() => this.onBlur(3)}
                                         label={"output"}
                                     />
                                 </TabPane>
                                 <TabPane
                                     tab="expected"
                                     key="2"
-                                    disabled={false}
-                                >
+                                    disabled={false}>
                                     <Ace
                                         value={expected}
                                         onChange={expected =>
-                                            this.setState({ expected })
+                                            this.set({ expected })
                                         }
                                         height={height / 2}
                                         focus={focusedAce === 4}
                                         onFocus={() => this.focus(4)}
+                                        onBlur={() => this.onBlur(4)}
                                         label={"expected"}
                                     />
                                 </TabPane>

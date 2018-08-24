@@ -75,6 +75,13 @@ export const resetMethod = (id) => {
     }
 }
 
+export const setIsDirty = (value) => {
+    return {
+        type: ActionTypes.SET_IS_DIRTY,
+        value
+    }
+}
+
 export const updateIO = (id, IO_id, value) => {
 
     return {
@@ -106,6 +113,15 @@ export const setIsRunning = (value) => {
 
     return {
         type: ActionTypes.SET_IS_RUNNING,
+        value,
+    }
+}
+
+export const updateMethod = (id, value) => {
+
+    return {
+        type: ActionTypes.UPDATE_METHOD,
+        id,
         value,
     }
 }

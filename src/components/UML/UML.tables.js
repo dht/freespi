@@ -4,7 +4,7 @@ import "./UML.css";
 const logIt = log => {
     let newLog = log;
     console.clear();
-    const { params = {}, output } = log;
+    const { params = {}, output } = log; 
     const keys = Object.keys(params);
 
     // only a single param

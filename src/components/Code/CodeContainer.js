@@ -1,52 +1,61 @@
 import React from "react";
-import {connect} from "react-redux";
-import Code from './Code';
-import {setCurrentIO, updateCode, setIsRunning} from "../../reducers/appState/appState_actions";
-import {autosave, makeMethod, runAll, download} from "../../reducers/app_thunks";
-import {withRouter} from "react-router-dom";
-import {fourSelector} from "../../selectors/selectors";
+import { connect } from "react-redux";
+import Code from "./Code";
+import * as actions from "../../reducers/appState/appState_actions";
+import * as thunks from "../../reducers/app_thunks";
+import * as selectors from "../../selectors/selectors";
+import { withRouter } from "react-router-dom";
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        ...fourSelector(state)
+        ...selectors.fourSelector(state)
     };
-}
+};
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        setCode: (data) => {
-            dispatch(updateCode(data))
-                .then(() => {
-                    dispatch(autosave())
-                })
+        save: () => {
+            dispatch(thunks.autosave());
         },
-        loadIO: (index) => {
-            dispatch(setCurrentIO(index));
+        setCode: data => {
+            dispatch(actions.updateCode(data));
+        },
+        loadIO: index => {
+            dispatch(actions.setCurrentIO(index));
         },
         makeMethod: (name, data) => {
             data.id = name;
-            dispatch(makeMethod(name, data));
+            dispatch(thunks.makeMethod(name, data));
             ownProps.history.push(`/${ownProps.id}/_`);
         },
         runAll: () => {
             setTimeout(() => {
-                dispatch(runAll());
+                dispatch(thunks.runAll());
             }, 1000);
         },
         download: () => {
-            dispatch(download());
+            dispatch(thunks.download());
         },
-        setIsRunning: (isRunning) => {
-            dispatch(setIsRunning(isRunning));
+        setDirty: isCode => {
+            if (isCode) {
+                dispatch(thunks.setIsDirtyCode(true));
+            } else {
+                dispatch(thunks.setIsDirtyIO(true));
+            }
+        },
+        setIsRunning: isRunning => {
+            dispatch(actions.setIsRunning(isRunning));
         },
         share: () => {
             const url = document.location.href;
-            window.open(url + "/run", "_blank")
+            window.open(url + "/run", "_blank");
         }
-    }
-}
+    };
+};
 
-export default withRouter(connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(Code));
+export default withRouter(
+    connect(
+        mapStateToProps,
+        mapDispatchToProps
+    )(Code)
+);

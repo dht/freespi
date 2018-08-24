@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./Tester.css";
 import { Button } from "../Bar/Button";
 import { getKeys } from "../../utils/keys";
+import classnames from "classnames";
 
 const arr = size => Array.from(Array(size), (_, i) => i + 1);
 
@@ -43,7 +44,7 @@ class Tester extends Component {
 
     runAll = () => {
         this.props.runAll();
-    }
+    };
 
     render() {
         let { page } = this.state;
@@ -64,24 +65,23 @@ class Tester extends Component {
 
                             // console.log('i, currentIO', i, currentIO, IO);
 
-                            let classNames = i === currentIO ? "selected " : "";
-                            classNames += IO ? "active " : "";
-                            classNames +=
-                                expected && expected === output ? "ok " : "";
-                            classNames +=
-                                expected && expected !== output
-                                    ? "failing "
-                                    : "";
+                            let className = classnames("box", {
+                                selected: i === currentIO,
+                                active: IO,
+                                ok: expected && expected === output,
+                                failing: expected && expected !== output,
+                                dirty: IO && IO.isDirty
+                            });
 
                             return (
                                 <div
-                                    className={`box ${classNames}`}
+                                    className={className}
                                     key={i}
                                     title={keys[`TEST_${i}`]}
-                                    onClick={() => this.props.onClick(i)}
-                                >
+                                    onClick={() => this.props.onClick(i)}>
                                     {i}
 
+                                    <div className="dirty-popoi">*</div>
                                     <div className="popoi" />
                                 </div>
                             );

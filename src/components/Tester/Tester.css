@@ -8,7 +8,9 @@
     flex-wrap: nowrap; }
   .Tester-container .box {
     min-width: 50px;
-    line-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-right: 1px solid gray;
     cursor: pointer;
     position: relative;
@@ -21,6 +23,17 @@
       height: 6px;
       border-radius: 6px;
       background-color: transparent; }
+    .Tester-container .box .dirty-popoi {
+      position: absolute;
+      bottom: 7px;
+      left: 3px;
+      width: 6px;
+      height: 6px;
+      border-radius: 6px;
+      background-color: transparent;
+      font-size: 12px;
+      color: gray;
+      display: none; }
     .Tester-container .box:hover {
       background-color: #eee; }
     .Tester-container .box.selected {
@@ -31,3 +44,5 @@
       background-color: green; }
     .Tester-container .box.failing .popoi {
       background-color: red; }
+    .Tester-container .box.dirty .dirty-popoi {
+      display: block; }
