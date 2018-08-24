@@ -29,10 +29,7 @@ const IO = props => {
         <li
             key={id}
             onMouseOver={() => logIt(log)}
-            onClick={ev => {
-                ev.preventDefault();
-                props.onClickIO(name, log);
-            }}>
+            onClick={() => props.onClickIO(name, log)}>
             {run}
         </li>
     );
@@ -66,6 +63,7 @@ const Box = props => {
                         name={log.name}
                         log={log.result}
                         run={log.run}
+                        onClickIO={props.onClickIO}
                     />
                 ))}
             </ul>
