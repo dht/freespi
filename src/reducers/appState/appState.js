@@ -1,36 +1,40 @@
+import * as storage from "../../utils/storage";
+
 export const initialState = {
     id: null,
     isLoading: false,
     isRunning: false,
-    current: '_',
-    currentIO: '1',
+    isOffline: storage.getIsOffline(),
+    current: "_",
+    currentIO: "1",
     methods: {
         _: {
-            id: '_',
-            code: 'return input;',
+            id: "_",
+            code: "return input;",
             IOs: {
-                '1': {
-                    input: 'const input = 5;',
-                    output: '5',
-                    expected: '5',
+                "1": {
+                    input: "const input = 5;",
+                    output: "5",
+                    expected: "5"
                 }
             }
-        },
+        }
     }
 };
 
 export const ActionTypes = {
-    SET_WORKSPACE: 'SET_WORKSPACE',
-    SET_IS_LOADING: 'SET_IS_LOADING',
-    SET_IS_RUNNING: 'SET_IS_RUNNING',
-    RESET_WORKSPACE: 'RESET_WORKSPACE',
-    SET_CURRENT: 'SET_CURRENT',
-    SET_CURRENT_IO: 'SET_CURRENT_IO',
-    UPDATE_CODE: 'UPDATE_CODE',
-    REMOVE_METHOD: 'REMOVE_METHOD',
-    RESET_METHOD: 'RESET_METHOD',
-    UPDATE_IO: 'UPDATE_IO',
-    SET_IOS: 'SET_IOS',
+    SET_WORKSPACE: "SET_WORKSPACE",
+    SET_IS_LOADING: "SET_IS_LOADING",
+    SET_IS_RUNNING: "SET_IS_RUNNING",
+    SET_IS_OFFLINE: "SET_IS_OFFLINE",
+    RESET_WORKSPACE: "RESET_WORKSPACE",
+    SET_CURRENT: "SET_CURRENT",
+    SET_CURRENT_IO: "SET_CURRENT_IO",
+    UPDATE_CODE: "UPDATE_CODE",
+    REMOVE_METHOD: "REMOVE_METHOD",
+    RESET_METHOD: "RESET_METHOD",
+    UPDATE_IO: "UPDATE_IO",
+    SET_IOS: "SET_IOS"
 };
 
 export const IO = (state = {}, action) => {
@@ -39,14 +43,14 @@ export const IO = (state = {}, action) => {
             return {
                 ...state,
                 ...action.value
-            }
+            };
 
         default:
-            return state
+            return state;
     }
-}
+};
 
-export const IOs = (state = {}, action) => {    
+export const IOs = (state = {}, action) => {
     switch (action.type) {
         case ActionTypes.SET_IOS:
             return action.value;
@@ -55,22 +59,21 @@ export const IOs = (state = {}, action) => {
             return {
                 ...state,
                 [action.index]: IO(state[action.index], action)
-            }
+            };
 
         case ActionTypes.RESET_METHOD:
             return {
-                '1': {
-                    input: 'const input = 5;',
-                    output: '5',
-                    expected: '5',
+                "1": {
+                    input: "const input = 5;",
+                    output: "5",
+                    expected: "5"
                 }
-            }
+            };
 
         default:
-            return state
+            return state;
     }
-}
-
+};
 
 const method = (state, action) => {
     switch (action.type) {
@@ -79,13 +82,13 @@ const method = (state, action) => {
                 ...state,
                 id: action.id,
                 code: action.value,
-                isPromise: action.isPromise,
-            }
+                isPromise: action.isPromise
+            };
 
         case ActionTypes.RESET_METHOD:
             return {
                 ...state,
-                code: 'return input;',
+                code: "return input;",
                 IOs: IOs(state.IOs, action)
             };
 
@@ -97,9 +100,9 @@ const method = (state, action) => {
             };
 
         default:
-            return state
+            return state;
     }
-}
+};
 
 const methods = (state, action) => {
     let newState;
@@ -115,32 +118,37 @@ const methods = (state, action) => {
             };
 
         case ActionTypes.REMOVE_METHOD:
-            newState = {...state};
+            newState = { ...state };
             delete newState[action.id];
             return newState;
 
         default:
-            return state
+            return state;
     }
-}
+};
 
 const appState = (state = initialState, action) => {
-
     switch (action.type) {
         case ActionTypes.SET_WORKSPACE:
-            return action.value
+            return { ...state, ...action.value };
 
         case ActionTypes.SET_IS_LOADING:
             return {
                 ...state,
                 isLoading: action.value
-            }
-     
+            };
+
         case ActionTypes.SET_IS_RUNNING:
             return {
                 ...state,
                 isRunning: action.value
-            }
+            };
+
+        case ActionTypes.SET_IS_OFFLINE:
+            return {
+                ...state,
+                isOffline: action.value
+            };
 
         case ActionTypes.SET_CURRENT:
             return {
@@ -171,10 +179,8 @@ const appState = (state = initialState, action) => {
             };
 
         default:
-            return state
+            return state;
     }
-
-}
+};
 
 export default appState;
-

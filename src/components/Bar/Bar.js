@@ -6,7 +6,9 @@ import { Button } from "./Button";
 import { getKeys } from "../../utils/keys";
 import classnames from "classnames";
 
-const Divider = (props) => <div className={classnames("Divider-container", props.className)} />;
+const Divider = props => (
+    <div className={classnames("Divider-container", props.className)} />
+);
 
 class Bar extends Component {
     keydown = ev => {
@@ -79,14 +81,18 @@ class Bar extends Component {
                     >
                         home
                     </Button>
+                    <Button
+                        onClick={this.props.showUML}
+                        title={keys.GLOBALS}
+                    >
+                        input
+                    </Button>
                     <Divider className="long" />
                     <Clock />
                     <Button onClick={this.props.download}>
                         cloud_download
                     </Button>
-                    <Button onClick={this.props.share}>
-                        extension
-                    </Button>            
+                    <Button onClick={this.props.share}>extension</Button>
                     <Divider />
                 </div>
                 <div className="half space-between">

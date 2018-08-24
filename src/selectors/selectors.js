@@ -7,6 +7,7 @@ export const isRunningSelector = state => state.appState.isRunning
 export const currentSelector = state => state.appState.current
 export const currentIOSelector = state => state.appState.currentIO
 export const methodsSelector = state => state.appState.methods || {};
+export const isOfflineSelector = state => state.appState.isOffline;
 
 export const sortedMethodsSelector = createSelector(
     methodsSelector,

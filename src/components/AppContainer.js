@@ -1,14 +1,15 @@
 import React from "react";
 import {connect} from "react-redux";
 import App from './App';
-import {loadApp, autosave} from "../reducers/app_thunks";
+import {loadApp, autosave, toggleOffline} from "../reducers/app_thunks";
 import {removeMethod, setCurrent} from "../reducers/appState/appState_actions";
 import * as api from "../utils/firebase";
-import {currentSelector} from "../selectors/selectors";
+import * as selectors from "../selectors/selectors";
 
 const mapStateToProps = (state, ownProps) => {
         return {
-            current: currentSelector(state)
+            current: selectors.currentSelector(state),
+            isOffline: selectors.isOfflineSelector(state),
         };
 }
 
@@ -44,6 +45,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             dispatch(removeMethod(key));
             api.removeMethod(key);
         },
+        toggleOffline: () => {
+            dispatch(toggleOffline());
+        }
     }
 }
 

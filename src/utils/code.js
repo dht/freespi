@@ -15,11 +15,36 @@ return fnc();
 `;
 };
 
-const _method = (name, vars = [], code) => {
-    const async = code.indexOf("await ") >= 0 ? "async" : "";
+const _method = (name, vars = [], code, withLog = true) => {
+    const _async = code.indexOf("await ") >= 0 ? "async" : "";
+    const _await = code.indexOf("await ") >= 0 ? "await" : "";
 
-    return `const ${name} = ${async} (${vars.join(", ")}) => {
-    ${code}
+    const preLogCode = withLog
+        ? `
+    // for UML view
+    window.depth++;
+    const run = window.run;
+    if (window.rlog) {
+        window.rlog(run, "${name}", {${vars.join(", ")}});
+    }`
+        : "";
+
+    const postLogCode = withLog
+        ? `
+    if (window.rlog) {
+        window.rlog(run, "${name}", null, result);
+    }
+    window.depth--;
+    `
+        : "";
+
+    return `const ${name} = ${_async} (${vars.join(", ")}) => {
+        ${preLogCode}
+        const result = ${_await}(${_async} () => {
+            ${code}
+        })();
+        ${postLogCode}
+        return result;
 };
 `;
 };
@@ -46,7 +71,7 @@ const identify = input => {
         return {};
     }
 };
-const returnError = (error) => {
+const returnError = error => {
     const { stack, message } = error;
     const ok = false;
     const output = `/*\n${message}\n\n${stack}*/`;
@@ -54,12 +79,11 @@ const returnError = (error) => {
     return {
         ok,
         output
-    }
-}
+    };
+};
 
 export const runCode = async (input, code, globals = "") => {
-    let output,
-        isPromise;
+    let output, isPromise;
 
     // debugger;
 
@@ -68,11 +92,11 @@ export const runCode = async (input, code, globals = "") => {
     const parsedCode = _code(input, code, globals);
 
     try {
-    output = new Function(parsedCode)().catch(e => ({
-        ok: false,
-        error: e
-    }));
-    }  catch (e) {
+        output = new Function(parsedCode)().catch(e => ({
+            ok: false,
+            error: e
+        }));
+    } catch (e) {
         return returnError(e);
     }
 
@@ -87,7 +111,7 @@ export const runCode = async (input, code, globals = "") => {
         const { error } = output;
         return returnError(error);
     }
-    
+
     if (typeof output !== "string") {
         output = JSON.stringify(output, null, 4);
     }

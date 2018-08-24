@@ -1,88 +1,96 @@
 import * as api from "../utils/firebase";
-import {
-    resetWorkspace, setCurrent, setIOs, setIsLoading, setWorkspace,
-    updateMethodCode, resetMethod,
-} from "./appState/appState_actions";
-import {
-    codeSelector, currentSelector, fourSelector, idSelector, IOsSelector,
-    methodsSelector
-} from "../selectors/selectors";
-import {methodsToGlobal, runCode, downloadCode} from "../utils/code";
+import * as actions from "./appState/appState_actions";
+import * as selectors from "../selectors/selectors";
+import { methodsToGlobal, runCode, downloadCode } from "../utils/code";
+import * as storage from "../utils/storage";
 
 export const loadApp = (id, current, currentIO) => {
+    const isOffline = storage.getIsOffline();
+    const data = storage.getOfflineData();
 
-    return (dispatch) => {
+    return dispatch => {
         api.initWorkspace(id);
 
-        dispatch(setIsLoading(true));
+        if (isOffline && data) {
+            data["current"] = current;
+            data["currentIO"] = currentIO;
+            dispatch(actions.setWorkspace(data));
+            dispatch(actions.setIsOffline(isOffline));
+            return;
+        }
+
+        dispatch(actions.setIsLoading(true));
 
         api.getWorkspace().then(data => {
-
             // console.log('data', data);
 
-            dispatch(setIsLoading(false));
+            dispatch(actions.setIsLoading(false));
 
             if (!data) {
-                dispatch(resetWorkspace(id));
+                dispatch(actions.resetWorkspace(id));
                 api.newWorkspace(id);
             } else {
                 // console.log('data', data);
                 data["current"] = current;
                 data["currentIO"] = currentIO;
-                dispatch(setWorkspace(data))
+                dispatch(actions.setWorkspace(data));
             }
-        })
-    }
-}
+        });
+    };
+};
 
 export const autosave = () => {
+    const isOffline = storage.getIsOffline();
 
     return (dispatch, getState) => {
+        if (isOffline) return;
 
         const state = getState(),
-            data = fourSelector(state),
-            {current, currentIO, code, input, output, expected} = data || {};
+            data = selectors.fourSelector(state),
+            { current, currentIO, code, input, output, expected } = data || {};
 
         if (current && currentIO) {
-            api.updateMethod(current, currentIO, {code, input, output, expected});
+            api.updateMethod(current, currentIO, {
+                code,
+                input,
+                output,
+                expected
+            });
         }
-    }
-}
-
+    };
+};
 
 export const makeMethod = (name, data = {}) => {
-
     return (dispatch, getState) => {
         const state = getState();
-        const current = currentSelector(state);
-        const IOs = IOsSelector(state);
+        const current = selectors.currentSelector(state);
+        const IOs = selectors.IOsSelector(state);
 
         // reset current
         if (current === "_") {
-            dispatch(resetMethod(current));
+            dispatch(actions.resetMethod(current));
             api.reset_();
         }
 
-        dispatch(setCurrent("_"));
-        dispatch(updateMethodCode(name, data.code, data.isPromise));
+        dispatch(actions.setCurrent("_"));
+        dispatch(actions.updateMethodCode(name, data.code, data.isPromise));
 
-        dispatch(setIOs(name, IOs));
+        dispatch(actions.setIOs(name, IOs));
         api.saveIOs(name, IOs);
 
         api.updateMethod(name, 1, data);
-    }
-}
+    };
+};
 
 export const runAll = () => {
-
     return (dispatch, getState) => {
         const state = getState(),
-            current = currentSelector(state),
-            IOs = IOsSelector(state),
-            methods = methodsSelector(state),
-            code = codeSelector(state);
+            current = selectors.currentSelector(state),
+            IOs = selectors.IOsSelector(state),
+            methods = selectors.methodsSelector(state),
+            code = selectors.codeSelector(state);
 
-        const globals = methodsToGlobal(methods)
+        const globals = methodsToGlobal(methods);
 
         // console.log('IOs', current, IOs);
 
@@ -90,7 +98,7 @@ export const runAll = () => {
 
         Object.keys(IOs).forEach(async key => {
             const IO = IOs[key],
-                {input} = IO || {};
+                { input } = IO || {};
 
             if (input) {
                 const result = await runCode(input, code, globals);
@@ -99,22 +107,35 @@ export const runAll = () => {
                     IO.output = result.output;
                 }
             }
-        })
+        });
 
-        dispatch(setIOs(current, IOs));
+        dispatch(actions.setIOs(current, IOs));
         api.saveIOs(current, IOs);
-    }
-}
-
+    };
+};
 
 export const download = () => {
-
     return (dispatch, getState) => {
         const state = getState(),
-            data = fourSelector(state),
-            {globals} = data;
+            data = selectors.fourSelector(state),
+            { globals } = data;
 
-            downloadCode("code.txt", globals);
-    }
-}
+        downloadCode("code.txt", globals);
+    };
+};
 
+export const toggleOffline = () => {
+    return (dispatch, getState) => {
+        const state = getState(),
+            isOffline = selectors.isOfflineSelector(state);
+
+        if (!isOffline) {
+            dispatch(actions.setIsOffline(true));
+            storage.setOfflineData(state.appState);
+            storage.setIsOffline(true);
+        } else {
+            dispatch(actions.setIsOffline(false));
+            storage.setIsOffline(false);
+        }
+    };
+};

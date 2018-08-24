@@ -124,6 +124,11 @@ class Code extends Component {
 
         if (isLoading) return;
 
+        // for UML view
+        if (window.clearlog) {
+            window.clearlog();
+        }
+
         this.setState({ output: "// running..." });
         this.props.setIsRunning(true);
         const result = await runCode(input, code, globals);
@@ -213,6 +218,7 @@ class Code extends Component {
                     run={this.run}
                     onNavigateHome={this.props.onNavigateHome}
                     showGlobals={this.props.showGlobals}
+                    showUML={this.props.showUML}
                     save={this.save}
                     loadIO={this.props.loadIO}
                     runAll={this.props.runAll}

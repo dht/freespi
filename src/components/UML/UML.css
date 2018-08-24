@@ -1,0 +1,125 @@
+.UML-container {
+  background-color: #333;
+  color: #eee;
+  min-width: 700px; }
+  .UML-container .bar {
+    background-color: #eee;
+    display: flex; }
+  .UML-container .actions {
+    display: flex;
+    flex-direction: row;
+    background-color: white; }
+  .UML-container .Button-container {
+    flex: 1;
+    text-align: center; }
+  .UML-container .content {
+    flex: 1;
+    height: 462px;
+    padding: 20px 10px;
+    box-sizing: border-box;
+    border: 1px solid #555;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    overflow: auto;
+    position: relative; }
+    .UML-container .content.no-padding {
+      padding: 0; }
+    .UML-container .content > .box {
+      margin: 5px; }
+      .UML-container .content > .box .title {
+        border-left: 1px solid gray;
+        border-right: 1px solid gray;
+        border-top: 1px solid gray;
+        padding: 10px 0;
+        border-radius: 2px;
+        position: relative;
+        font-size: 14px;
+        text-align: center; }
+        .UML-container .content > .box .title .x {
+          position: absolute;
+          right: 5px;
+          top: 1px;
+          color: #eee;
+          cursor: pointer; }
+          .UML-container .content > .box .title .x .icon {
+            font-size: 12px; }
+      .UML-container .content > .box ul {
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+        width: 170px;
+        border: 1px solid gray;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        height: 100px;
+        overflow: auto; }
+        .UML-container .content > .box ul:first-child {
+          border-bottom: none; }
+        .UML-container .content > .box ul li {
+          padding: 3px;
+          width: 20px;
+          text-align: center;
+          font-size: 13px;
+          line-height: 20px;
+          height: 20px;
+          cursor: pointer;
+          color: #999;
+          border-radius: 3px; }
+          .UML-container .content > .box ul li:hover {
+            background-color: #777;
+            color: #ddd; }
+  .UML-container .info {
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    background-color: rgba(220, 220, 220, 0.96);
+    border-radius: 3px;
+    padding: 2px 10px;
+    width: 200px;
+    margin-left: -100px;
+    color: #333;
+    z-index: 9999;
+    text-align: center; }
+  .UML-container .vertical {
+    display: flex;
+    flex-direction: row; }
+    .UML-container .vertical .pages {
+      overflow: auto;
+      width: 50px;
+      height: 460px; }
+    .UML-container .vertical .page {
+      width: 100%;
+      text-align: center;
+      box-shadow: inset 0 0 3px 1px rgba(0, 0, 0, 0.1);
+      height: 25px;
+      color: #aaa;
+      cursor: pointer; }
+      .UML-container .vertical .page:hover, .UML-container .vertical .page.selected {
+        background-color: #777;
+        color: #ddd; }
+
+.ReactModal__Overlay {
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+
+.ReactModal__Content {
+  opacity: 0;
+  z-index: 1001;
+  height: 550px;
+  top: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+  right: auto !important;
+  min-width: 800px; }
+
+.ReactModal__Content--after-open {
+  opacity: 1;
+  transition: opacity 150ms; }
+
+.ReactModal__Content--before-close {
+  opacity: 0; }

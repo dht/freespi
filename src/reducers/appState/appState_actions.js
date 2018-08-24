@@ -12,6 +12,13 @@ import {ActionTypes} from "./appState";
 
  */
 
+export const setIsOffline = (value) => {
+    return {
+        type: ActionTypes.SET_IS_OFFLINE,
+        value
+    }
+}
+
 export const setWorkspace = (value) => {
     return {
         type: ActionTypes.SET_WORKSPACE,
