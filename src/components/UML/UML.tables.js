@@ -36,21 +36,19 @@ const Box = props => {
     const { id, log } = props,
         { inputs = [], outputs = [] } = log || {};
 
+    const inputsSorted = inputs.sort(byRun);
+    const outputSorted = outputs.sort(byRun);
+
     return (
         <div className="box">
             <ul className="inputs">
-                {inputs.sort(byRun).map(log => (
+                {inputsSorted.map(log => (
                     <IO id={log.id} log={log.inputs} run={log.run} />
                 ))}
             </ul>
-            <div className="title">
-                {id}
-                <div className="x" onClick={props.onIgnore}>
-                    <i className="material-icons icon">close</i>
-                </div>
-            </div>
+            <div className="title">{id}</div>
             <ul className="outputs">
-                {outputs.sort(byRun).map(log => (
+                {outputSorted.map(log => (
                     <IO id={log.id} log={log.result} run={log.run} />
                 ))}
             </ul>
@@ -62,27 +60,24 @@ const BoxSimple = props => {
     const { id, log } = props,
         { runs = {} } = log || {};
 
+    const keys = Object.keys(runs)
+        .map(i => parseInt(i, 10))
+        .sort(byRunId);
+
     return (
         <div className="box">
-            <div className="title">
-                {id}
-                <div className="x" onClick={props.onIgnore}>
-                    <i className="material-icons icon">close</i>
-                </div>
-            </div>
+            <div className="title">{id}</div>
             <ul className="outputs">
-                {Object.keys(runs)
-                    .sort(byRun)
-                    .map(runId => (
-                        <IO
-                            id={runId}
-                            log={{
-                                params: runs[runId].input,
-                                output: runs[runId].output
-                            }}
-                            run={runId}
-                        />
-                    ))}
+                {keys.map(runId => (
+                    <IO
+                        id={runId}
+                        log={{
+                            params: runs[runId].input,
+                            output: runs[runId].output
+                        }}
+                        run={runId}
+                    />
+                ))}
             </ul>
         </div>
     );
@@ -91,29 +86,13 @@ const BoxSimple = props => {
 export class UMLTables extends Component {
     state = {};
 
-    onIgnore = (key) => {
-        if (window.ignoreList) {
-            window.ignoreList.push(key);
-        }
-    }
-
     renderBox(id, key, log) {
         const { isIO } = this.props;
 
         return isIO ? (
-            <BoxSimple
-                key={key}
-                id={id}
-                log={log}
-                onIgnore={() => this.onIgnore(key)}
-            />
+            <BoxSimple key={key} id={id} log={log} />
         ) : (
-            <Box
-                key={key}
-                id={id}
-                log={log}
-                onIgnore={() => this.onIgnore(key)}
-            />
+            <Box key={key} id={id} log={log} />
         );
     }
 
@@ -133,7 +112,13 @@ export class UMLTables extends Component {
 const byRun = (a, b) => {
     if (a.run === b.run) return 0;
 
-    return parseFloat(a.run) > parseFloat(b.run) ? 1 : -1;
+    return a.run > b.run ? 1 : -1;
+};
+
+const byRunId = (a, b) => {
+    if (a === b) return 0;
+
+    return a > b ? 1 : -1;
 };
 
 export default UMLTables;

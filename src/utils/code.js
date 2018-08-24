@@ -19,6 +19,12 @@ const _method = (name, vars = [], code, withLog = true) => {
     const _async = code.indexOf("await ") >= 0 ? "async" : "";
     const _await = code.indexOf("await ") >= 0 ? "await" : "";
 
+    const ignore = /^\/\/@ ignore/.test(code);
+
+    if (ignore) {
+        withLog = false;
+    }
+
     const preLogCode = withLog
         ? `
     // for UML view

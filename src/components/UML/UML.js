@@ -24,13 +24,16 @@ export class UML extends Component {
 
     renderInner() {
         const { mode } = this.state;
-        const isIO = mode === Modes.IO;
         const isTimeline = mode === Modes.TIMELINE;
 
-        return isTimeline ? (
-            <UMLTimeline {...this.props} />
-        ) : (
-            <UMLTables {...this.props} isIO={isIO} />
+        return (
+            <div>
+                {isTimeline ? (
+                    <UMLTimeline {...this.props} />
+                ) : (
+                    <UMLTables {...this.props} isIO={mode === Modes.IO} />
+                )}
+            </div>
         );
     }
 
@@ -56,7 +59,9 @@ export class UML extends Component {
                             view_day
                         </Button>
                         <Button
-                            onClick={() => this.setState({ mode: Modes.TIMELINE })}
+                            onClick={() =>
+                                this.setState({ mode: Modes.TIMELINE })
+                            }
                         >
                             view_carousel
                         </Button>

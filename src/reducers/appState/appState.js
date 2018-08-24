@@ -127,6 +127,7 @@ const methods = (state, action) => {
     }
 };
 
+
 const appState = (state = initialState, action) => {
     switch (action.type) {
         case ActionTypes.SET_WORKSPACE:

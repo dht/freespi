@@ -1,5 +1,6 @@
 const OFFLINE_KEY = "OFFLINE_KEY";
 const OFFLINE_DATA_KEY = "OFFLINE_DATA_KEY";
+const IGNORE_DATA_KEY = "IGNORE_DATA_KEY";
 
 export const setKey = (key, value) =>
     localStorage.setItem(key, parseValue(value));
@@ -10,7 +11,7 @@ export const getBoolean = key => getKey(key) === "1";
 
 export const getJSON = key => {
     try {
-        return JSON.parse(getKey(key));
+        return JSON.parse(getKey(key)) || {};
     } catch (e) {
         return {};
     }
@@ -35,7 +36,7 @@ export const setIsOffline = value => setKey(OFFLINE_KEY, value);
 export const setOfflineData = value => setKey(OFFLINE_DATA_KEY, value);
 
 export const getOfflineData = () => {
-    let json = getJSON(OFFLINE_DATA_KEY) || {},
+    let json = getJSON(OFFLINE_DATA_KEY),
         methods = json.methods || {},
         keys = Object.keys(methods);
 

@@ -36,14 +36,6 @@
         position: relative;
         font-size: 14px;
         text-align: center; }
-        .UML-container .content > .box .title .x {
-          position: absolute;
-          right: 5px;
-          top: 1px;
-          color: #eee;
-          cursor: pointer; }
-          .UML-container .content > .box .title .x .icon {
-            font-size: 12px; }
       .UML-container .content > .box ul {
         box-sizing: border-box;
         padding: 0;

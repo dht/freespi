@@ -47,18 +47,6 @@
                 position: relative;
                 font-size: 14px;
                 text-align: center;
-
-                .x {
-                    position:absolute;
-                    right:5px;
-                    top:1px;
-                    color:#eee;
-                    cursor:pointer;
-
-                    .icon {
-                        font-size:12px;
-                    }
-                }
             }
 
             ul {
@@ -107,7 +95,7 @@
         padding: 2px 10px;
         width: 200px;
         margin-left: -100px;
-        color:#333;
+        color: #333;
         z-index: 9999;
         text-align: center;
     }
