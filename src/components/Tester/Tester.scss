@@ -53,16 +53,10 @@
         }
 
         &.selected {
-            background-color: lighten(olivedrab, 30%);
+            background-color: lighten(#aba, 20%);
 
             &.active {
-                background-color: olivedrab;
-            }
-
-            color: white;
-
-            .dirty-popoi {
-                color: white;
+                background-color: #aba;
             }
         }
 

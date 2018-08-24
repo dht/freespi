@@ -41,12 +41,9 @@
     .Tester-container .box.active {
       color: #333; }
     .Tester-container .box.selected {
-      background-color: #b8db6f;
-      color: white; }
+      background-color: #e3e8e3; }
       .Tester-container .box.selected.active {
-        background-color: olivedrab; }
-      .Tester-container .box.selected .dirty-popoi {
-        color: white; }
+        background-color: #aba; }
     .Tester-container .box.ok .popoi {
       background-color: green; }
     .Tester-container .box.failing .popoi {
