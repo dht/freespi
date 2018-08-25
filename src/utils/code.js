@@ -15,7 +15,7 @@ return fnc();
 `;
 };
 
-const _method = (name, vars = [], code, withLog = true) => {
+const _method = (name, vars = [], code = "", withLog = true) => {
     const _async = code.indexOf("await ") >= 0 ? "async" : "";
     const _await = code.indexOf("await ") >= 0 ? "await" : "";
 
@@ -202,9 +202,33 @@ export const downloadCode = (filename, text) => {
     document.body.removeChild(element);
 };
 
-export const paramsToInput = (params) => {
+export const paramsToInput = params => {
     return Object.keys(params).reduce((output, key) => {
         const param = params[key];
-        return output +  `const ${key} = ` +  JSON.stringify(param, null, 4) + ";\n";
+        return (
+            output + `const ${key} = ` + JSON.stringify(param, null, 4) + ";\n"
+        );
     }, "");
+};
+
+
+export const StatsIOs = IOs => {
+
+    return Object.keys(IOs).reduce(
+        (memo, key) => {
+            const IO = IOs[key];
+            const {input, output, expected} = IO;
+
+            if (!input || !output || !expected) {
+                memo.empty++;
+            } else  if (output === expected){
+                memo.ok++;
+            } else {
+                memo.fail++;
+            }
+             
+            return memo;
+        },
+        { ok: 0, fail: 0, empty: 0 }
+    );
 };

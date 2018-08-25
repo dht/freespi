@@ -13,11 +13,18 @@ export class IO extends Component {
     state = {};
 
     render() {
-        const { input, output } = this.props;
+        let { inputs, output } = this.props;
+        let _inputs;
+
+        if (typeof inputs === "object") {
+            _inputs = JSON.stringify(inputs, null, 4);
+        } else {
+            _inputs = inputs;
+        }
 
         return (
             <div className="content no-padding">
-                <Ace value={String(input)} readOnly={true} height={340} />
+                <Ace value={String(_inputs)} readOnly={true} height={340} />
                 <Ace value={String(output)} readOnly={true} height={340} />
             </div>
         );

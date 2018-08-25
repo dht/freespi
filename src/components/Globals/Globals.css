@@ -8,13 +8,17 @@
 
 .Globals-container .content {
   display: flex;
-  flex-direction: row; }
-  .Globals-container .content .list {
-    width: 180px;
-    background-color: #444444;
-    color: #ccc;
-    overflow: auto;
+  flex-direction: row;
+  position: relative; }
+  .Globals-container .content .list-wrapper {
+    position: relative;
     height: 500px; }
+    .Globals-container .content .list-wrapper .list {
+      width: 230px;
+      background-color: #444444;
+      color: #ccc;
+      overflow: auto;
+      height: 460px; }
   .Globals-container .content .preview {
     flex: 1; }
 
@@ -67,7 +71,7 @@
   bottom: auto !important;
   left: auto !important;
   right: auto !important;
-  min-width: 700px; }
+  min-width: 750px; }
 
 .ReactModal__Content--after-open {
   opacity: 1;

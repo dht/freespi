@@ -19,30 +19,32 @@ const Modes = {
 
 export class UML extends Component {
     state = {
-        mode: Modes.SPLIT
+        mode: Modes.SPLIT,
+        search: ""
     };
 
     onClickIO = (name, params) => {
         const ok = window.confirm("generate a new IO for this run?");
 
         if (ok) {
-            this.props.generateIO(name, params).then((id) => {
+            this.props.generateIO(name, params).then(id => {
                 alert(`IO #${id} was created`);
             });
         }
     };
 
     renderInner() {
-        const { mode } = this.state;
+        const { mode, search } = this.state;
         const isTimeline = mode === Modes.TIMELINE;
 
         return (
             <div>
                 {isTimeline ? (
-                    <UMLTimeline {...this.props} />
+                    <UMLTimeline {...this.props} search={search} />
                 ) : (
                     <UMLTables
                         {...this.props}
+                        search={search}
                         isIO={mode === Modes.IO}
                         onClickIO={this.onClickIO}
                     />
@@ -51,7 +53,16 @@ export class UML extends Component {
         );
     }
 
+    onChange = ev => {
+        this.setState({ search: ev.target.value });
+    };
+
+    onFocus = ev => {
+        ev.target.select();
+    };
+
     render() {
+        const { search } = this.state;
         const { logs, show } = this.props;
 
         return (
@@ -60,6 +71,13 @@ export class UML extends Component {
                 isOpen={show}
                 onRequestClose={this.props.onClose}>
                 <div className="UML-container">
+                    <div className="search">
+                        <input
+                            onFocus={this.onFocus}
+                            onChange={this.onChange}
+                            placeholder="search in output..."
+                        />
+                    </div>
                     <div className="bar">
                         <Button
                             onClick={() =>

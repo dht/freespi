@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import {methodsToGlobal} from "../utils/code";
+import * as coder from "../utils/code";
 
 export const idSelector = state => state.appState.id
 export const isLoadingSelector = state => state.appState.isLoading
@@ -12,7 +12,14 @@ export const isDirtySelector = state => state.appState.isDirty;
 
 export const sortedMethodsSelector = createSelector(
     methodsSelector,
-    (methods) =>   Object.keys(methods).sort().map(key => methods[key])
+    (methods) =>   Object.keys(methods).sort().map(key => {
+
+        const method = methods[key];
+
+        method.stats = coder.StatsIOs(method.IOs || {});
+        
+        return method;
+    })
 )
 
 export const methodSelector = createSelector(
@@ -48,7 +55,7 @@ export const fourSelector = createSelector(
     (current, currentIO, code, IO, methods, isDirty, isLoading) => {
         let {input, output, expected} = IO || {};
 
-        const globals = methodsToGlobal(methods)
+        const globals = coder.methodsToGlobal(methods)
 
         return {
             current,

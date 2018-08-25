@@ -37,7 +37,7 @@ const IO = props => {
 };
 
 const Box = props => {
-    const { id, log } = props,
+    const { id, log, search } = props,
         { inputs = [], outputs = [] } = log || {};
 
     const inputsSorted = inputs.sort(byRun);
@@ -46,30 +46,36 @@ const Box = props => {
     return (
         <div className="box">
             <ul className="inputs">
-                {inputsSorted.map(log => (
-                    <IO
-                        log={log}
-                        print={log.inputs}
-                        onClickIO={props.onClickIO}
-                    />
-                ))}
+                {inputsSorted
+                    .filter(log =>
+                        filterBySearch(search, JSON.stringify(log.inputs))
+                    )
+                    .map(log => (
+                        <IO
+                            log={log}
+                            print={log.inputs}
+                            onClickIO={props.onClickIO}
+                        />
+                    ))}
             </ul>
             <div className="title">{id}</div>
             <ul className="outputs">
-                {outputSorted.map(log => (
-                    <IO
-                        log={log}
-                        print={log.result}
-                        onClickIO={props.onClickIO}
-                    />
-                ))}
+                {outputSorted
+                    .filter(log => filterBySearch(search, log.result))
+                    .map(log => (
+                        <IO
+                            log={log}
+                            print={log.result}
+                            onClickIO={props.onClickIO}
+                        />
+                    ))}
             </ul>
         </div>
     );
 };
 
 const BoxSimple = props => {
-    const { id, log } = props,
+    const { id, log, search } = props,
         { runs = {} } = log || {};
 
     const keys = Object.keys(runs)
@@ -80,16 +86,18 @@ const BoxSimple = props => {
         <div className="box">
             <div className="title">{id}</div>
             <ul className="outputs">
-                {keys.map(runId => (
-                    <IO
-                        log={runs[runId]}
-                        print={{
-                            params: runs[runId].inputs,
-                            output: runs[runId].output,
-                        }}
-                        onClickIO={props.onClickIO}                        
-                    />
-                ))}
+                {keys
+                    .filter(key => filterBySearch(search, runs[key].output))
+                    .map(runId => (
+                        <IO
+                            log={runs[runId]}
+                            print={{
+                                params: runs[runId].inputs,
+                                output: runs[runId].output
+                            }}
+                            onClickIO={props.onClickIO}
+                        />
+                    ))}
             </ul>
         </div>
     );
@@ -99,17 +107,24 @@ export class UMLTables extends Component {
     state = {};
 
     renderBox(id, key, log) {
-        const { isIO } = this.props;
+        const { isIO, search } = this.props;
 
         return isIO ? (
             <BoxSimple
                 key={key}
                 id={id}
                 log={log}
+                search={search}
                 onClickIO={this.props.onClickIO}
             />
         ) : (
-            <Box key={key} id={id} log={log} onClickIO={this.props.onClickIO} />
+            <Box
+                key={key}
+                id={id}
+                log={log}
+                search={search}
+                onClickIO={this.props.onClickIO}
+            />
         );
     }
 
@@ -139,3 +154,8 @@ const byRunId = (a, b) => {
 };
 
 export default UMLTables;
+
+const filterBySearch = (search, output) => {
+    const regex = new RegExp(search);
+    return !search || regex.exec(output);
+};

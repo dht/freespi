@@ -1,0 +1,32 @@
+.Stats-container {
+  z-index: 9999;
+  height: 20px;
+  color: white;
+  padding: 10px;
+  background-color: rgba(40, 40, 40, 0.9);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around; }
+  .Stats-container .pair {
+    font-size: 14px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center; }
+    .Stats-container .pair .number {
+      width: 30px;
+      height: 24px;
+      margin-left: 5px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      background-color: #444; }
+    .Stats-container .pair.green {
+      color: yellowgreen; }
+    .Stats-container .pair.red {
+      color: orangered; }
+    .Stats-container .pair.gray {
+      color: #fff; }

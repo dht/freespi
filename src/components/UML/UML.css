@@ -2,6 +2,16 @@
   background-color: #333;
   color: #eee;
   min-width: 700px; }
+  .UML-container .search {
+    background-color: white;
+    display: flex; }
+    .UML-container .search input {
+      font-size: 23px;
+      padding: 5px 10px;
+      flex: 1; }
+      .UML-container .search input::placeholder {
+        color: #aaa;
+        font-weight: 300; }
   .UML-container .bar {
     background-color: #eee;
     display: flex; }

@@ -3,6 +3,22 @@
     color: #eee;
     min-width: 700px;
 
+    .search {
+        background-color:white;
+        display: flex;
+        
+        input {
+            font-size:23px;
+            padding:5px 10px;
+            flex:1;
+
+            &::placeholder {
+                color:#aaa;
+                font-weight: 300;
+            }
+        }
+    }
+
     .bar {
         background-color: #eee;
         display: flex;

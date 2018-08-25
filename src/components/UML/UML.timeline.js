@@ -44,24 +44,24 @@ export class UMLTimeline extends Component {
     }
 
     renderPages() {
-        const { maxRun } = this.props;
+        const { maxRun, logs } = this.props;
         const { currentRun } = this.state;
 
-        return createArray(maxRun).map(i => {
-            const className = classnames("page", {
-                selected: i === currentRun
-            });
+        return createArray(maxRun)
+            .map(i => {
+                const className = classnames("page", {
+                    selected: i === currentRun
+                });
 
-            return (
-                <div
-                    key={i}
-                    className={className}
-                    onClick={() => this.setState({ currentRun: i })}
-                >
-                    {i}
-                </div>
-            );
-        });
+                return (
+                    <div
+                        key={i}
+                        className={className}
+                        onClick={() => this.setState({ currentRun: i })}>
+                        {i}
+                    </div>
+                );
+            });
     }
 
     render() {
@@ -69,7 +69,7 @@ export class UMLTimeline extends Component {
 
         return (
             <div className="vertical">
-                <IO input={run.input} output={run.output} />
+                <IO inputs={run.inputs} output={run.output} />
                 <div className="pages">{this.renderPages()}</div>
                 <div className="info">{run.name}</div>
             </div>
