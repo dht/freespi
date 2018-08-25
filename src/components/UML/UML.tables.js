@@ -48,7 +48,7 @@ const Box = props => {
             <ul className="inputs">
                 {inputsSorted
                     .filter(log =>
-                        filterBySearch(search, JSON.stringify(log.inputs))
+                        filterBySearch(search, log.inputs)
                     )
                     .map(log => (
                         <IO
@@ -156,6 +156,10 @@ const byRunId = (a, b) => {
 export default UMLTables;
 
 const filterBySearch = (search, output) => {
-    const regex = new RegExp(search);
-    return !search || regex.exec(output);
+    try {
+        const regex = new RegExp(search);
+        return !search || regex.exec(JSON.stringify(output));
+    } catch (e) {
+        return true;
+    }
 };

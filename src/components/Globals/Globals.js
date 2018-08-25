@@ -100,7 +100,7 @@ class Globals extends Component {
                     <div className="content">
                         {this.renderList()}
                         <div className="preview">
-                            <Ace value={code} readOnly={true} height={500} />
+                            <Ace value={code} readOnly={true} height={520} />
                         </div>
                     </div>
 

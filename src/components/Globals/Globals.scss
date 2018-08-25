@@ -16,14 +16,14 @@
 
         .list-wrapper {
           position: relative;
-          height: 500px;              
+          height: 550px;              
 
             .list {
                 width: 230px;
                 background-color: #444444;
                 color: #ccc;
                 overflow: auto;
-                height: 460px;              
+                height: 510px;              
             }
         }
 
@@ -99,7 +99,7 @@
 .ReactModal__Content {
     opacity: 0;
     z-index: 1001;
-    height: 550px;
+    height: 594px;
     top: auto !important;
     bottom: auto !important;
     left: auto !important;
