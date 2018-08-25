@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./Bar.css";
 import Tester from "../Tester/TesterContainer";
 import Clock from "../Clock/ClockContainer";
-import { Button } from "./Button";
+import { Button } from "../Button/Button";
 import { getKeys } from "../../utils/keys";
 import classnames from "classnames";
 

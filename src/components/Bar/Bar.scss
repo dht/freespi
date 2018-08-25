@@ -1,56 +1,82 @@
 .Bar-container {
-  display: flex;
-  text-align: center;
-  background-color: #fff;
-
-  .half {
     display: flex;
     text-align: center;
-    flex:1;
+    background-color: #fff;
 
-    &.space-between {
-      justify-content: space-between;
+    .half {
+        display: flex;
+        text-align: center;
+        flex: 1;
+
+        &.space-between {
+            justify-content: space-between;
+        }
     }
-  }
 
-  .github {
-    background-image:url(/images/GitHub-Mark-120px-plus.png);
-    background-size:contain;
-    background-repeat: no-repeat;
-    width:28px; 
-    height:28px;    
-    display:block;
-    align-self: center;
-    margin-right:20px;
-  }
+    .github {
+        background-image: url(/images/GitHub-Mark-120px-plus.png);
+        background-size: contain;
+        background-repeat: no-repeat;
+        width: 28px;
+        height: 28px;
+        display: block;
+        align-self: center;
+        margin-right: 20px;
+    }
 }
 
 .Button-container {
-  padding: 0 10px;
-  border-right: 1px solid gray;
-  width: 50px;
-  min-height:44px;
-  color:#444;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    padding: 0 10px;
+    border-right: 1px solid gray;
+    width: 50px;
+    min-height: 44px;
+    color: #444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-  &:hover {
-    background-color: #f3f3f3;
-    cursor: pointer;
-  }
+    &:hover {
+        background-color: #f3f3f3;
+        cursor: pointer;
+    }
 
-  i {
-    animation-duration: 4s;
-  }
+    i {
+        animation-duration: 4s;
+    }
+}
+
+.Small-Button-container {
+    padding: 0 7px;
+    border-right: 1px solid gray;
+    border-bottom: 1px solid gray;
+    width: 10px;
+    min-height: 22px;
+    color: #444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    &:hover {
+        background-color: #f3f3f3;
+        cursor: pointer;
+    }
+
+    i {
+        font-size: 20px;
+        animation-duration: 4s;
+    }
 }
 
 .Divider-container {
-  width:10px;
-  background-color: #f3f3f3;
-  border-right: 1px solid gray;
+    width: 10px;
+    background-color: #f3f3f3;
+    border-right: 1px solid gray;
 
-  &.long {
-    flex: 1,
-  }
+    &.long {
+        flex: 1;
+    }
 }

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./Tester.css";
-import { Button } from "../Bar/Button";
+import { Button } from "../Button/Button";
 import { getKeys } from "../../utils/keys";
 import classnames from "classnames";
 
@@ -9,17 +9,21 @@ const arr = size => Array.from(Array(size), (_, i) => i + 1);
 class Tester extends Component {
     state = { page: 0 };
 
-    mousewheel = ev => {
-        if (!this.in) return;
-
+    nudgePage = delta => {
         let { page } = this.state;
 
-        page += ev.deltaY < 0 ? 0.3 : -0.3;
+        page += delta;
 
         page = Math.max(page, 0);
         page = Math.min(page, 2);
 
         this.setState({ page });
+    };
+
+    mousewheel = ev => {
+        if (!this.in) return;
+
+        this.nudgePage(ev.deltaY < 0 ? 0.3 : -0.3);
     };
 
     mouseenter = ev => {
@@ -86,6 +90,22 @@ class Tester extends Component {
                                 </div>
                             );
                         })}
+                </div>
+                <div>
+                    <div className="next">
+                        <Button
+                            small={true}
+                            disabled={page === 0}
+                            onClick={() => this.nudgePage(-1)}>
+                            arrow_drop_up
+                        </Button>
+                        <Button
+                            small={true}
+                            disabled={page === 2}
+                            onClick={() => this.nudgePage(+1)}>
+                            arrow_drop_down
+                        </Button>
+                    </div>
                 </div>
                 <Button onClick={this.runAll} title={keys.RUN_ALL}>
                     refresh

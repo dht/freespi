@@ -40,3 +40,7 @@ ReactDOM.render(
 );
 registerServiceWorker();
 initLogs();
+
+if (module.hot) {
+    module.hot.accept();
+  }

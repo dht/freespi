@@ -33,6 +33,25 @@
   .Button-container i {
     animation-duration: 4s; }
 
+.Small-Button-container {
+  padding: 0 7px;
+  border-right: 1px solid gray;
+  border-bottom: 1px solid gray;
+  width: 10px;
+  min-height: 22px;
+  color: #444;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+  .Small-Button-container:last-child {
+    border-bottom: none; }
+  .Small-Button-container:hover {
+    background-color: #f3f3f3;
+    cursor: pointer; }
+  .Small-Button-container i {
+    font-size: 20px;
+    animation-duration: 4s; }
+
 .Divider-container {
   width: 10px;
   background-color: #f3f3f3;

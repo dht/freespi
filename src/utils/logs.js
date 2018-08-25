@@ -1,3 +1,5 @@
+import clone from "clone";
+
 export const initLogs = () => {
     window.clearlog = function() {
         window.id = 1;
@@ -17,7 +19,7 @@ export const initLogs = () => {
             inputs,
             result,
             run,
-            depth: window.depth,
+            depth: window.depth
         });
     };
     window.clearlog();
@@ -28,23 +30,27 @@ export const getLogs = () => {
     let maxRun = 0;
 
     logs = logs.reduce((memo, log) => {
-        const { name, inputs, run } = log;
+        let { id, name, inputs, run } = log;
 
         maxRun = Math.max(maxRun, run);
 
         memo[name] = memo[name] || {};
         memo[name].runs = memo[name].runs || {};
-        memo[name].runs[run] = memo[name].runs[run] || {};
-        memo[name].runs[run].name = log.name;
+        memo[name].runs[run] = memo[name].runs[run] || {
+            id,
+            name,
+            run
+        };
 
         if (inputs) {
             memo[name].inputs = memo[name].inputs || [];
             memo[name].inputs.push(log);
-            memo[name].runs[run].input = log.inputs;
+            memo[name].runs[run].inputs = log.inputs;
             memo[name].runs[run].start = log.ts;
         } else {
+            inputs = inputs || memo[name].runs[run].inputs;
             memo[name].outputs = memo[name].outputs || [];
-            memo[name].outputs.push(log);
+            memo[name].outputs.push({ ...log, inputs });
             memo[name].runs[run].output = log.result;
             memo[name].runs[run].end = log.ts;
             memo[name].runs[run].duration =

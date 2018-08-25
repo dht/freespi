@@ -23,12 +23,13 @@ const logIt = log => {
 };
 
 const IO = props => {
-    const { name, id, log, run } = props;
+    const { log, print } = props;
+    const { name, id, run } = log;
 
     return (
         <li
             key={id}
-            onMouseOver={() => logIt(log)}
+            onMouseOver={() => logIt(print)}
             onClick={() => props.onClickIO(name, log)}>
             {run}
         </li>
@@ -47,10 +48,8 @@ const Box = props => {
             <ul className="inputs">
                 {inputsSorted.map(log => (
                     <IO
-                        id={log.id}
-                        name={log.name}
-                        log={log.inputs}
-                        run={log.run}
+                        log={log}
+                        print={log.inputs}
                         onClickIO={props.onClickIO}
                     />
                 ))}
@@ -59,10 +58,8 @@ const Box = props => {
             <ul className="outputs">
                 {outputSorted.map(log => (
                     <IO
-                        id={log.id}
-                        name={log.name}
-                        log={log.result}
-                        run={log.run}
+                        log={log}
+                        print={log.result}
                         onClickIO={props.onClickIO}
                     />
                 ))}
@@ -85,14 +82,12 @@ const BoxSimple = props => {
             <ul className="outputs">
                 {keys.map(runId => (
                     <IO
-                        id={runId}
-                        name={runs[runId].name}
-                        onClickIO={props.onClickIO}
-                        log={{
-                            params: runs[runId].input,
+                        log={runs[runId]}
+                        print={{
+                            params: runs[runId].inputs,
                             output: runs[runId].output,
                         }}
-                        run={runId}
+                        onClickIO={props.onClickIO}                        
                     />
                 ))}
             </ul>

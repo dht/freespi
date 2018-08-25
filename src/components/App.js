@@ -111,6 +111,9 @@ const ${name} = (${vars.join(", ")}) => {
                 />
                 <UML
                     show={showUML}
+                    onLoadMethod={method =>
+                        this.props.navigateToCurrent(method)
+                    }
                     onClose={() => this.setState({ showUML: false })}
                 />
 

@@ -3,7 +3,7 @@ import "./UML.css";
 import ReactModal from "react-modal";
 import UMLTables from "./UML.tables";
 import UMLTimeline from "./UML.timeline";
-import { Button } from "../Bar/Button";
+import { Button } from "../Button/Button";
 
 const WideButton = props => (
     <div onClick={props.onClick} className="Button-container">

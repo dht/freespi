@@ -209,7 +209,8 @@ export const generateIO = (name, params) => {
 
         const nextKey = lastKey + 1;
 
-        const input = coder.paramsToInput(params);
+        const input = coder.paramsToInput(params.inputs);
+
         dispatch(actions.updateIO(name, nextKey, {input, expected: " "}));
         api.saveIO(name, nextKey, {input, expected: " "});
 
