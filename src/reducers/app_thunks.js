@@ -137,8 +137,18 @@ export const runAll = () => {
 export const download = () => {
     return (dispatch, getState) => {
         const state = getState(),
-            data = selectors.fourSelector(state),
-            { globals } = data;
+            methods = selectors.methodsSelector(state);
+
+        let globals = coder.methodsToGlobal(methods, false);
+
+        globals += Object.keys(methods)
+            .filter(key => key !== "_")
+            .reduce((output, key) => {
+                output += `\t${key}: ${key},\n`;
+                return output;
+            }, "/* for node: \n\nmodule.exports = {");
+
+        globals += "};\n*/";
 
         coder.downloadCode("code.txt", globals);
     };
@@ -211,8 +221,8 @@ export const generateIO = (name, params) => {
 
         const input = coder.paramsToInput(params.inputs);
 
-        dispatch(actions.updateIO(name, nextKey, {input, expected: " "}));
-        api.saveIO(name, nextKey, {input, expected: " "});
+        dispatch(actions.updateIO(name, nextKey, { input, expected: " " }));
+        api.saveIO(name, nextKey, { input, expected: " " });
 
         return Promise.resolve(nextKey);
     };

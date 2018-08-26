@@ -161,7 +161,7 @@ export const extractVarsFromMethod = method => {
     return extractVars(input);
 };
 
-export const methodsToGlobal = methods => {
+export const methodsToGlobal = (methods, withLog = false) => {
     // console.log('methods', methods);
 
     return Object.keys(methods).reduce((output, key) => {
@@ -171,7 +171,7 @@ export const methodsToGlobal = methods => {
             { code } = method || {},
             vars = extractVarsFromMethod(method);
 
-        output += _method(key, vars, code);
+        output += _method(key, vars, code, withLog);
 
         return output;
     }, "");
