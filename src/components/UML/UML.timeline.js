@@ -47,21 +47,20 @@ export class UMLTimeline extends Component {
         const { maxRun, logs } = this.props;
         const { currentRun } = this.state;
 
-        return createArray(maxRun)
-            .map(i => {
-                const className = classnames("page", {
-                    selected: i === currentRun
-                });
-
-                return (
-                    <div
-                        key={i}
-                        className={className}
-                        onClick={() => this.setState({ currentRun: i })}>
-                        {i}
-                    </div>
-                );
+        return createArray(maxRun).map(i => {
+            const className = classnames("page", {
+                selected: i === currentRun
             });
+
+            return (
+                <div
+                    key={i}
+                    className={className}
+                    onClick={() => this.setState({ currentRun: i })}>
+                    {i}
+                </div>
+            );
+        });
     }
 
     render() {

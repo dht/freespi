@@ -1,9 +1,9 @@
 function isMac() {
-    return navigator.platform.indexOf('Mac') > -1
+    return navigator.platform.indexOf("Mac") > -1;
 }
 
 function isWindows() {
-    return navigator.platform.indexOf('Win') > -1
+    return navigator.platform.indexOf("Win") > -1;
 }
 
 const keysMac = {
@@ -21,8 +21,8 @@ const keysMac = {
     TEST_7: "⌥7",
     TEST_8: "⌥8",
     TEST_9: "⌥9",
-    TEST_10: "⌥10",
-}
+    TEST_10: "⌥10"
+};
 
 const keysWindows = {
     RUN: "^⏎ or right click for auto-run",
@@ -39,12 +39,12 @@ const keysWindows = {
     TEST_7: "Alt+7",
     TEST_8: "Alt+8",
     TEST_9: "Alt+9",
-    TEST_10: "Alt+10",
-}
+    TEST_10: "Alt+10"
+};
 
 export const getKeys = () => {
     if (isMac()) return keysMac;
     if (isWindows()) return keysWindows;
 
     return {};
-}
+};

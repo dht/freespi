@@ -1,4 +1,4 @@
-import {ActionTypes} from "./appState";
+import { ActionTypes } from "./appState";
 
 /*
 {
@@ -12,128 +12,113 @@ import {ActionTypes} from "./appState";
 
  */
 
-export const setIsOffline = (value) => {
+export const setIsOffline = value => {
     return {
         type: ActionTypes.SET_IS_OFFLINE,
         value
-    }
-}
+    };
+};
 
-export const setWorkspace = (value) => {
+export const setWorkspace = value => {
     return {
         type: ActionTypes.SET_WORKSPACE,
         value
-    }
-}
+    };
+};
 
 export const resetWorkspace = () => {
-
     return {
-        type: ActionTypes.RESET_WORKSPACE,
-    }
-}
+        type: ActionTypes.RESET_WORKSPACE
+    };
+};
 
-export const setCurrent = (value) => {
-
+export const setCurrent = value => {
     return {
         type: ActionTypes.SET_CURRENT,
-        value,
-    }
-}
-export const setCurrentIO = (value) => {
-
+        value
+    };
+};
+export const setCurrentIO = value => {
     return {
         type: ActionTypes.SET_CURRENT_IO,
-        value,
-    }
-}
+        value
+    };
+};
 
 export const updateMethodCode = (id, value, isPromise) => {
-
     return {
         type: ActionTypes.UPDATE_CODE,
         id,
         value,
-        isPromise,
-    }
-}
+        isPromise
+    };
+};
 
-export const removeMethod = (id) => {
-
+export const removeMethod = id => {
     return {
         type: ActionTypes.REMOVE_METHOD,
-        id,
-    }
-}
+        id
+    };
+};
 
-
-export const resetMethod = (id) => {
-
+export const resetMethod = id => {
     return {
         type: ActionTypes.RESET_METHOD,
-        id,
-    }
-}
+        id
+    };
+};
 
 export const updateIO = (id, IO_id, value) => {
-
     return {
         type: ActionTypes.UPDATE_IO,
         id,
         index: IO_id,
-        value,
-    }
-}
+        value
+    };
+};
 
 export const removeIO = (id, IO_id) => {
-
     return {
         type: ActionTypes.REMOVE_IO,
         id,
-        index: IO_id,
-    }
-}
+        index: IO_id
+    };
+};
 
 export const setIOs = (id, value) => {
-
     return {
         type: ActionTypes.SET_IOS,
         id,
-        value,
-    }
-}
+        value
+    };
+};
 
-export const setIsLoading = (value) => {
-
+export const setIsLoading = value => {
     return {
         type: ActionTypes.SET_IS_LOADING,
-        value,
-    }
-}
+        value
+    };
+};
 
-export const setIsRunning = (value) => {
-
+export const setIsRunning = value => {
     return {
         type: ActionTypes.SET_IS_RUNNING,
-        value,
-    }
-}
+        value
+    };
+};
 
 export const updateMethod = (id, value) => {
-
     return {
         type: ActionTypes.UPDATE_METHOD,
         id,
-        value,
-    }
-}
+        value
+    };
+};
 
-export const updateCode = ({input, output, code, expected, isPromise}) => {
-
+export const updateCode = ({ input, output, code, expected, isPromise }) => {
     return (dispatch, getState) => {
-
-        const {appState} = getState(),
-            {current, currentIO} = appState;
+        const { appState } = getState(),
+            { current, currentIO } = appState;
 
         if (code) {
             dispatch(updateMethodCode(current, code, isPromise));
@@ -150,6 +135,5 @@ export const updateCode = ({input, output, code, expected, isPromise}) => {
         }
 
         return Promise.resolve(true);
-    }
-}
-
+    };
+};

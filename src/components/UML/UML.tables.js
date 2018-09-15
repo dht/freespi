@@ -47,9 +47,7 @@ const Box = props => {
         <div className="box">
             <ul className="inputs">
                 {inputsSorted
-                    .filter(log =>
-                        filterBySearch(search, log.inputs)
-                    )
+                    .filter(log => filterBySearch(search, log.inputs))
                     .map(log => (
                         <IO
                             log={log}

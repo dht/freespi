@@ -15,9 +15,21 @@ return fnc();
 `;
 };
 
-const _method = (name, vars = [], code = "", withLog = true) => {
+const addTab = str => {
+    return str.replace(/^(.)/gim, "\t$1");
+};
+
+const _method = (name, vars = [], code = "", options = {}) => {
     const _async = code.indexOf("await ") >= 0 ? "async" : "";
     const _await = code.indexOf("await ") >= 0 ? "await" : "";
+    let { withLog = false, simple = false } = options;
+
+    if (simple) {
+        return `export const ${name} = ${_async} (${vars.join(", ")}) => {
+${addTab(code)}
+};
+`;
+    }
 
     const ignore = /^\/\/@ ignore/.test(code);
 
@@ -88,6 +100,18 @@ const returnError = error => {
     };
 };
 
+export const run = code => {
+    let output;
+
+    try {
+        output = new Function(code)();
+    } catch (e) {
+        output = e.message;
+    }
+
+    return output;
+};
+
 export const runCode = async (input, code, globals = "") => {
     let output, isPromise;
 
@@ -125,7 +149,7 @@ export const runCode = async (input, code, globals = "") => {
     return { ok: true, output, isPromise };
 };
 
-const extractInputVariables = input => {
+const extractInputVariables = (input, asJson = false) => {
     let re = /(^const|^let)\s+([a-zA-Z_0-9]+)\s+=\s+([^;^\n]+)/gm,
         match,
         results = [];
@@ -138,7 +162,11 @@ const extractInputVariables = input => {
             value: match[3]
         });
 
-    // console.log('results', results);
+    if (asJson) {
+        let vars = results.map(item => item.name).join(", ");
+        const code = `${input}; return {${vars}};`;
+        return run(code);
+    }
 
     return results;
 };
@@ -161,17 +189,22 @@ export const extractVarsFromMethod = method => {
     return extractVars(input);
 };
 
-export const methodsToGlobal = (methods, withLog = false) => {
+export const methodToGlobal = (method, options) => {
+    const { id, code } = method || {},
+        vars = extractVarsFromMethod(method);
+
+    return _method(id, vars, code, options);
+};
+
+export const methodsToGlobal = (methods, options) => {
     // console.log('methods', methods);
+
+    // withLog = true;
 
     return Object.keys(methods).reduce((output, key) => {
         if (key === "_") return output;
 
-        const method = methods[key],
-            { code } = method || {},
-            vars = extractVarsFromMethod(method);
-
-        output += _method(key, vars, code, withLog);
+        output += methodToGlobal(methods[key], options);
 
         return output;
     }, "");
@@ -211,24 +244,127 @@ export const paramsToInput = params => {
     }, "");
 };
 
-
 export const StatsIOs = IOs => {
-
     return Object.keys(IOs).reduce(
         (memo, key) => {
             const IO = IOs[key];
-            const {input, output, expected} = IO;
+            const { input, output, expected } = IO;
 
             if (!input || !output || !expected) {
                 memo.empty++;
-            } else  if (output === expected){
+            } else if (output === expected) {
                 memo.ok++;
             } else {
                 memo.fail++;
             }
-             
+
             return memo;
         },
         { ok: 0, fail: 0, empty: 0 }
+    );
+};
+
+export const inputsToJson = (input, sampleId) => {
+    const vars = extractInputVariables(input, true);
+    let output;
+
+    const json = JSON.stringify(vars, null, 4);
+
+    return `export const sample${sampleId} = ${json}
+`;
+};
+
+export const identifyExpeceted = expected => {
+    let type, json;
+
+    try {
+        json = JSON.parse(expected);
+        type = typeof json;
+    } catch (e) {
+        type = typeof expected;
+    }
+
+    if (type === "string" && expected.length > 20) {
+        type = "text";
+    }
+
+    return type;
+};
+
+export const expectedToJson = (expected, sampleId, name) => {
+    const type = identifyExpeceted(expected);
+    let varName, varValue, imports, template, code;
+
+    varName = `sample${sampleId}`;
+
+    switch (type) {
+        case "array":
+        case "object":
+            varValue = `${expected}`;
+            break;
+        case "text":
+            imports = 'import * as file from "../helpers";';
+            varValue = `file.readTemplate("${name}.sample${sampleId}.js")`;
+            template = {
+                name: `${name}.sample${sampleId}.js`,
+                content: expected
+            };
+            break;
+
+        case "boolean":
+            varValue = `${expected}`;
+
+        case "string":
+        default:
+            varValue = `"${expected}"`;
+            break;
+    }
+
+    code = `export const ${varName} = ${varValue};\n`;
+
+    return {
+        imports,
+        code,
+        template
+    };
+};
+
+export const test = (name, method) => {
+    const vars = extractVarsFromMethod(method);
+
+    const varsStr = vars.map(variable => `sample.${variable}`).join(",");
+
+    return `// @flow
+import { ${name} } from "../methods/${name}";
+import * as samples from "../__mocks__/in/${name}";
+import * as responses from "../__mocks__/out/${name}";
+
+describe("${name}", () => {
+    it("samples", () => {
+        Object.keys(samples).forEach(key => {
+            const sample = samples[key];
+            const response = ${name}(${varsStr});
+
+            expect(response).toEqual(responses[key]);
+        });
+    });
+});
+`;
+};
+
+export const methodToImports = (method, methods) => {
+    const { code, id } = method || {};
+
+    return (
+        Object.keys(methods)
+            .map(key => key)
+            .filter(key => key !== id)
+            .filter(key => {
+                return code.indexOf(key + "(") >= 0;
+            })
+            .map(key => {
+                return `import { ${key} } from "./${key}";`;
+            })
+            .join("\n") + "\n"
     );
 };

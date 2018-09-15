@@ -1,15 +1,14 @@
-import React, {Component} from 'react';
-import './Runner.css';
+import React, { Component } from "react";
+import "./Runner.css";
 import { Ace } from "../Ace/Ace";
 import { runCode } from "../../utils/code";
 import Bar from "../Bar/Bar";
 
 export class Runner extends Component {
-
     state = {
-        input: '',
-        output: ''
-    }
+        input: "",
+        output: ""
+    };
 
     componentDidMount() {
         window.addEventListener("keydown", this.keydown);
@@ -36,7 +35,6 @@ export class Runner extends Component {
         }
     };
 
-
     componentWillReceiveProps(props) {
         const { code, input, output, expected } = props;
 
@@ -61,20 +59,19 @@ export class Runner extends Component {
         this.setState({ output: result.output, isPromise: result.isPromise });
     };
 
-
     render() {
-        const {current} = this.props;
-        const {input, output} = this.state;
+        const { current } = this.props;
+        const { input, output } = this.state;
 
         return (
-            <div className="Runner-container">    
-              <Bar
+            <div className="Runner-container">
+                <Bar
                     run={this.run}
                     loadIO={this.props.loadIO}
                     download={this.props.download}
-                    minimal={true}            
+                    minimal={true}
                 />
-               <div className="row">
+                <div className="row">
                     <div className="column">
                         <Ace
                             value={input}
@@ -89,8 +86,8 @@ export class Runner extends Component {
                             onChange={output => this.setState({ output })}
                             label="output"
                         />
-                    </div>           
-                    </div>           
+                    </div>
+                </div>
             </div>
         );
     }

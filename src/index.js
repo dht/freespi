@@ -8,7 +8,7 @@ import store from "./reducers/store";
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import { guid8 } from "./utils/guid";
 import { DiffExample } from "./components/Ace/DiffExample";
-import {initLogs} from "./utils/logs";
+import { initLogs } from "./utils/logs";
 
 const CreateNew = () => {
     return <Redirect to={`/${guid8()}/`} />;
@@ -43,4 +43,4 @@ initLogs();
 
 if (module.hot) {
     module.hot.accept();
-  }
+}

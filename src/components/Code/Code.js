@@ -298,15 +298,13 @@ class Code extends Component {
                             <button
                                 className="delete"
                                 onClick={() => this.deleteIO()}>
-                                 <i className="material-icons">
-                                    delete
-                                </i>
+                                <i className="material-icons">delete</i>
                             </button>
 
                             <button
                                 className="equal"
                                 onClick={() => this.expectedEqualToResult()}>
-                               =
+                                =
                             </button>
 
                             <Tabs

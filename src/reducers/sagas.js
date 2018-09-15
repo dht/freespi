@@ -21,7 +21,7 @@ export function* save(action) {
     const delta = diff.diff(latestSnapshot, state);
 
     if (delta && latestSnapshot) {
-        yield put({ type: "SET_IS_DIRTY", value: true });        
+        yield put({ type: "SET_IS_DIRTY", value: true });
     }
 
     latestSnapshot = state;

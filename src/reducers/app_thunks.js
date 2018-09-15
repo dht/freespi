@@ -134,26 +134,6 @@ export const runAll = () => {
     };
 };
 
-export const download = () => {
-    return (dispatch, getState) => {
-        const state = getState(),
-            methods = selectors.methodsSelector(state);
-
-        let globals = coder.methodsToGlobal(methods, false);
-
-        globals += Object.keys(methods)
-            .filter(key => key !== "_")
-            .reduce((output, key) => {
-                output += `\t${key}: ${key},\n`;
-                return output;
-            }, "/* for node: \n\nmodule.exports = {");
-
-        globals += "};\n*/";
-
-        coder.downloadCode("code.txt", globals);
-    };
-};
-
 export const toggleOffline = () => {
     return (dispatch, getState) => {
         const state = getState(),
