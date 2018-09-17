@@ -5,7 +5,6 @@ import * as actions from "../../reducers/appState/appState_actions";
 import * as thunks from "../../reducers/app_thunks";
 import * as selectors from "../../selectors/selectors";
 import { withRouter } from "react-router-dom";
-import * as zip from "../../utils/zip";
 
 const mapStateToProps = (state, ownProps) => {
     return {
@@ -35,7 +34,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             }, 1000);
         },
         download: () => {
-            dispatch(zip.download());
+            dispatch(thunks.download());
         },
         setDirty: () => {
             dispatch(thunks.setIsDirtyIO(true));

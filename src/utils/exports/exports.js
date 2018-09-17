@@ -34,6 +34,8 @@ export const packageJson = `{
         "babel-jest": "^23.6.0",
         "babel-preset-env": "^1.7.0",
         "jest": "^23.6.0",
+        "clone": "^2.1.2",
+        "js-beautify": "^1.8.6",
         "regenerator-runtime": "^0.12.1"
     }
 }

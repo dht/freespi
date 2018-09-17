@@ -3,6 +3,7 @@ import { saveAs } from "file-saver/FileSaver";
 import * as selectors from "../selectors/selectors";
 import * as coder from "./code";
 import * as exports from "./exports/exports";
+const beautify = require("js-beautify/").js;
 
 export const generateZipStructure = () => {
     const f = {};
@@ -20,74 +21,67 @@ export const generateZipStructure = () => {
     return f;
 };
 
-export const download = () => {
+const writeMethodFile = (zip, key, method, methods) => {
+    const fileContent = [
+        coder.methodToNpmImports(method, methods),
+        coder.methodToImports(method, methods),
+        coder.methodToGlobal(method, { simple: true })
+    ].join("\n");
+
+    zip.methods.file(`${key}.js`, fileContent);
+};
+
+const writeSpecFile = (zip, key, method) => {
+    const fileContent = coder.test(key, method);
+    zip.tests.file(`${key}.spec.js`, fileContent);
+};
+
+const writeTemplateFile = (zip, template) => {
+    const fileContent = beautify(template.content);
+    zip.templates.file(template.name, fileContent);
+};
+
+const writeInput = (zip, key, inputs) => {
+    zip.in.file(`${key}.js`, inputs.join("\n"));
+};
+
+const writeOutput = (zip, key, expected) => {
+    zip.out.file(`${key}.js`, expected.join("\n"));
+};
+
+const writeConfigFile = zip => {
+    zip.root.file("package.json", exports.packageJson);
+    zip.mocks.file("helpers.js", exports.helpers);
+    zip.root.file(".babelrc", exports.babel);
+};
+
+const writeIOs = (zip, key, IOs) => {
+    const iosCode = coder.ioToTests(key, IOs);
+
+    if (iosCode.imports) {
+        iosCode.expected.unshift(iosCode.imports + "\n");
+    }
+
+    writeInput(zip, key, iosCode.inputs);
+    writeOutput(zip, key, iosCode.expected);
+};
+
+export const downloadZip = methods => {
     const zip = generateZipStructure();
 
-    return (dispatch, getState) => {
-        const state = getState(),
-            methods = selectors.methodsSelector(state),
-            keys = Object.keys(methods);
+    const output = Object.keys(methods).forEach(key => {
+        const method = methods[key];
+        const { IOs } = method;
 
-        const output = keys.forEach(key => {
-            const method = methods[key];
-            const { IOs, code } = method;
-            let imports;
+        writeMethodFile(zip, key, method, methods);
+        writeIOs(zip, key, IOs);
+        writeSpecFile(zip, key, method);
+    }, {});
 
-            zip.methods.file(
-                `${key}.js`,
-                coder.methodToImports(method, methods) +
-                    "\n" +
-                    coder.methodToGlobal(method, { simple: true })
-            );
+    writeConfigFile(zip);
 
-            zip.tests.file(`${key}.spec.js`, coder.test(key, method));
-
-            const iosCode = Object.keys(IOs || {}).reduce(
-                (memo, k, index) => {
-                    const IO = IOs[k],
-                        { input, expected } = IO;
-
-                    const inputLine = coder.inputsToJson(input, index + 1);
-                    const expectedData = coder.expectedToJson(
-                        expected,
-                        index + 1,
-                        key
-                    );
-
-                    memo.inputs.push(inputLine);
-                    memo.expected.push(expectedData.code);
-
-                    if (expectedData.imports) {
-                        imports = expectedData.imports;
-                    }
-
-                    if (expectedData.template) {
-                        zip.templates.file(
-                            expectedData.template.name,
-                            expectedData.template.content
-                        );
-                    }
-
-                    return memo;
-                },
-                { inputs: [], expected: [], templates: "" }
-            );
-
-            if (imports) {
-                iosCode.expected.unshift(imports + "\n");
-            }
-
-            zip.in.file(`${key}.js`, iosCode.inputs.join("\n"));
-            zip.out.file(`${key}.js`, iosCode.expected.join("\n"));
-        }, {});
-
-        zip.root.file("package.json", exports.packageJson);
-        zip.mocks.file("helpers.js", exports.helpers);
-        zip.root.file(".babelrc", exports.babel);
-
-        zip.root.generateAsync({ type: "blob" }).then(function(content) {
-            // see FileSaver.js
-            saveAs(content, "example.zip");
-        });
-    };
+    zip.root.generateAsync({ type: "blob" }).then(function(content) {
+        // see FileSaver.js
+        saveAs(content, "example.zip");
+    });
 };

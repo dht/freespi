@@ -368,3 +368,42 @@ export const methodToImports = (method, methods) => {
             .join("\n") + "\n"
     );
 };
+
+export const methodToNpmImports = method => {
+    const methods = ["clone"];
+
+    const { code } = method || {};
+
+    return (
+        methods
+            .filter(key => code.indexOf(key + "(") >= 0)
+            .map(key => `import ${key} from "${key}";`)
+            .join("\n") + "\n"
+    );
+};
+
+export const ioToTests = (key, IOs) => {
+    return Object.keys(IOs || {}).reduce(
+        (memo, k, index) => {
+            const IO = IOs[k],
+                { input, expected } = IO;
+
+            const inputLine = inputsToJson(input, index + 1);
+            const expectedData = expectedToJson(expected, index + 1, key);
+
+            memo.inputs.push(inputLine);
+            memo.expected.push(expectedData.code);
+
+            if (expectedData.imports) {
+                memo.imports = expectedData.imports;
+            }
+
+            if (expectedData.template) {
+                memo.templates.push(expectedData.template);
+            }
+
+            return memo;
+        },
+        { inputs: [], expected: [], templates: [], imports: null }
+    );
+};

@@ -3,6 +3,7 @@ import * as actions from "./appState/appState_actions";
 import * as selectors from "../selectors/selectors";
 import * as coder from "../utils/code";
 import * as storage from "../utils/storage";
+import * as zip from "../utils/zip";
 
 export const loadApp = (id, current, currentIO) => {
     const isOffline = storage.getIsOffline();
@@ -205,5 +206,14 @@ export const generateIO = (name, params) => {
         api.saveIO(name, nextKey, { input, expected: " " });
 
         return Promise.resolve(nextKey);
+    };
+};
+
+export const download = () => {
+    return (dispatch, getState) => {
+        const state = getState(),
+            methods = selectors.methodsSelector(state);
+
+        zip.downloadZip(methods);
     };
 };
