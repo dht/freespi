@@ -1,3 +1,5 @@
+const beautify = require("js-beautify/").js;
+
 const _code = (input, code, globals) => {
     return `
 ${globals}
@@ -20,8 +22,14 @@ const addTab = str => {
 };
 
 const _method = (name, vars = [], code = "", options = {}) => {
-    const _async = code.indexOf("await ") >= 0 ? "async" : "";
-    const _await = code.indexOf("await ") >= 0 ? "await" : "";
+    let _async = code.indexOf("await ") >= 0 ? "async" : "";
+    let _await = code.indexOf("await ") >= 0 ? "await" : "";
+
+    if (code.indexOf("@ignore_await")) {
+        _async = "";
+        _await = "";
+    }
+
     let { withLog = false, simple = false } = options;
 
     if (simple) {
@@ -35,6 +43,8 @@ ${addTab(code)}
 
     if (ignore) {
         withLog = false;
+    } else {
+        withLog = true;
     }
 
     const preLogCode = withLog
@@ -310,10 +320,9 @@ export const expectedToJson = (expected, sampleId, name) => {
                 content: expected
             };
             break;
-
         case "boolean":
             varValue = `${expected}`;
-
+            break;
         case "string":
         default:
             varValue = `"${expected}"`;
@@ -329,25 +338,49 @@ export const expectedToJson = (expected, sampleId, name) => {
     };
 };
 
-export const test = (name, method) => {
+export const test = (name, method, sampleId, isTextOutput) => {
+    const vars = extractVarsFromMethod(method);
+    const varsStr = vars.map(variable => `sample.${variable}`).join(",");
+    let runLine;
+
+    if (!isTextOutput) {
+        runLine = `${name}(${varsStr})`;
+    } else {
+        runLine = `beautify(${name}(${varsStr}))`;
+    }
+
+    return `\tit("sample ${sampleId}", () => {
+        const sample = samples.sample${sampleId};
+        const response = ${runLine};
+
+        expect(response).toEqual(responses.sample${sampleId});
+    });`;
+};
+
+export const tests = (name, method, IOsCount, isTextOutput) => {
     const vars = extractVarsFromMethod(method);
 
     const varsStr = vars.map(variable => `sample.${variable}`).join(",");
+
+    let importLine = "",
+        code = "";
+
+    if (isTextOutput) {
+        importLine = `const beautify = require("js-beautify/").js`;
+    }
+
+    for (let sampleId = 1; sampleId <= IOsCount; sampleId++) {
+        code += test(name, method, sampleId, isTextOutput) + "\n";
+    }
 
     return `// @flow
 import { ${name} } from "../methods/${name}";
 import * as samples from "../__mocks__/in/${name}";
 import * as responses from "../__mocks__/out/${name}";
+${importLine};
 
 describe("${name}", () => {
-    it("samples", () => {
-        Object.keys(samples).forEach(key => {
-            const sample = samples[key];
-            const response = ${name}(${varsStr});
-
-            expect(response).toEqual(responses[key]);
-        });
-    });
+${code}
 });
 `;
 };
@@ -382,6 +415,21 @@ export const methodToNpmImports = method => {
     );
 };
 
+export const isTextOutput = (key, IOs) => {
+    return Object.keys(IOs || {}).reduce((memo, k) => {
+        const IO = IOs[k],
+            { expected } = IO;
+
+        const expectedData = expectedToJson(expected, 1, key);
+
+        return expectedData.template ? true : memo;
+    }, false);
+};
+
+export const IOsCount = IOs => {
+    return Object.keys(IOs || {}).length;
+};
+
 export const ioToTests = (key, IOs) => {
     return Object.keys(IOs || {}).reduce(
         (memo, k, index) => {
@@ -404,6 +452,11 @@ export const ioToTests = (key, IOs) => {
 
             return memo;
         },
-        { inputs: [], expected: [], templates: [], imports: null }
+        {
+            inputs: [],
+            expected: [],
+            templates: [],
+            imports: null
+        }
     );
 };

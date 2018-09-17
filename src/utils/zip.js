@@ -31,8 +31,8 @@ const writeMethodFile = (zip, key, method, methods) => {
     zip.methods.file(`${key}.js`, fileContent);
 };
 
-const writeSpecFile = (zip, key, method) => {
-    const fileContent = coder.test(key, method);
+const writeSpecFile = (zip, key, method, IOsCount, isTextOutput) => {
+    const fileContent = coder.tests(key, method, IOsCount, isTextOutput);
     zip.tests.file(`${key}.spec.js`, fileContent);
 };
 
@@ -62,6 +62,10 @@ const writeIOs = (zip, key, IOs) => {
         iosCode.expected.unshift(iosCode.imports + "\n");
     }
 
+    iosCode.templates.forEach(template => {
+        writeTemplateFile(zip, template);
+    });
+
     writeInput(zip, key, iosCode.inputs);
     writeOutput(zip, key, iosCode.expected);
 };
@@ -72,10 +76,12 @@ export const downloadZip = methods => {
     const output = Object.keys(methods).forEach(key => {
         const method = methods[key];
         const { IOs } = method;
+        const isTextOutput = coder.isTextOutput(key, IOs);
+        const IOsCount = coder.IOsCount(IOs);
 
         writeMethodFile(zip, key, method, methods);
         writeIOs(zip, key, IOs);
-        writeSpecFile(zip, key, method);
+        writeSpecFile(zip, key, method, IOsCount, isTextOutput);
     }, {});
 
     writeConfigFile(zip);
