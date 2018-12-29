@@ -149,7 +149,7 @@ class Code extends Component {
             isPromise: result.isPromise
         });
 
-        this.props.save();
+        this.props.save(this.props.current);
     };
 
     save = () => {
@@ -217,11 +217,13 @@ class Code extends Component {
     set = value => {
         this.setState(value);
 
+        /*
         if (value.code) {
             this.setState({ isDirty: true });
         } else {
             this.props.setDirty();
         }
+        */
     };
 
     deleteIO() {

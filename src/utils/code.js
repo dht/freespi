@@ -255,23 +255,27 @@ export const paramsToInput = params => {
 };
 
 export const StatsIOs = IOs => {
-    return Object.keys(IOs).reduce(
-        (memo, key) => {
-            const IO = IOs[key];
-            const { input, output, expected } = IO;
+    console.log("IOs ->", IOs);
 
-            if (!input || !output || !expected) {
-                memo.empty++;
-            } else if (output === expected) {
-                memo.ok++;
-            } else {
-                memo.fail++;
-            }
+    return Object.keys(IOs)
+        .filter(key => IOs[key])
+        .reduce(
+            (memo, key) => {
+                const IO = IOs[key];
+                const { input, output, expected } = IO;
 
-            return memo;
-        },
-        { ok: 0, fail: 0, empty: 0 }
-    );
+                if (!input || !output || !expected) {
+                    memo.empty++;
+                } else if (output === expected) {
+                    memo.ok++;
+                } else {
+                    memo.fail++;
+                }
+
+                return memo;
+            },
+            { ok: 0, fail: 0, empty: 0 }
+        );
 };
 
 export const inputsToJson = (input, sampleId) => {

@@ -1,6 +1,6 @@
-import firebase from "firebase/app";
-import "firebase/auth";
-import "firebase/database";
+const firebase = require("firebase/app");
+require("firebase/auth");
+require("firebase/database");
 
 const config = {
     apiKey: "AIzaSyD99j8D124StULlW9rS-8xxzNT5D_L1KhQ",
@@ -41,7 +41,8 @@ const removeEmpty = obj =>
         );
 
 export const updateMethods = methods => {
-    methodsRef.update(removeEmpty(methods));
+    const data = removeEmpty(methods);
+    console.log("data ->", data);
 };
 
 export const getWorkspace = () => {

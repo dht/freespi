@@ -1,35 +1,23 @@
-import * as api from "../utils/firebase";
+import * as api from "../api/api";
 import * as actions from "./appState/appState_actions";
 import * as selectors from "../selectors/selectors";
 import * as coder from "../utils/code";
 import * as storage from "../utils/storage";
 import * as zip from "../utils/zip";
+import { getWorkspace } from "../api/api";
 
 export const loadApp = (id, current, currentIO) => {
     const isOffline = storage.getIsOffline();
     const data = storage.getOfflineData();
 
     return dispatch => {
-        api.initWorkspace(id);
-
-        if (isOffline && data) {
-            data["current"] = current;
-            data["currentIO"] = currentIO;
-            dispatch(actions.setWorkspace(data));
-            dispatch(actions.setIsOffline(isOffline));
-            return;
-        }
-
         dispatch(actions.setIsLoading(true));
 
-        api.getWorkspace().then(data => {
-            // console.log('data', data);
-
+        getWorkspace().then(data => {
             dispatch(actions.setIsLoading(false));
 
             if (!data) {
                 dispatch(actions.resetWorkspace(id));
-                api.newWorkspace(id);
             } else {
                 // console.log('data', data);
                 data["current"] = current;
@@ -40,43 +28,15 @@ export const loadApp = (id, current, currentIO) => {
     };
 };
 
-export const autosave = () => {
-    const isOffline = storage.getIsOffline();
-
+export const saveMethod = id => {
     return (dispatch, getState) => {
-        if (isOffline) return;
-
         const state = getState(),
-            data = selectors.fourSelector(state),
-            { current, currentIO, code, input, output, expected } = data || {};
+            methods = selectors.methodsSelector(state),
+            method = methods[id];
 
-        if (current && currentIO) {
-            api.updateMethod(current, currentIO, {
-                code,
-                input,
-                output,
-                expected
-            });
-        }
+        if (!method) return;
 
-        // dispatch(actions.setIsDirty(false));
-        dispatch(setIsDirtyIO(false));
-    };
-};
-
-export const save = () => {
-    const isOffline = storage.getIsOffline();
-
-    return (dispatch, getState) => {
-        if (isOffline) return;
-
-        const state = getState(),
-            data = selectors.methodsSelector(state);
-
-        api.updateMethods(data);
-
-        // dispatch(actions.setIsDirty(false));
-        dispatch(setIsDirtyIO(false));
+        api.writeMethod(id, method.code, method.IOs, method.stats);
     };
 };
 
@@ -89,16 +49,15 @@ export const makeMethod = (name, data = {}) => {
         // reset current
         if (current === "_") {
             dispatch(actions.resetMethod(current));
-            api.reset_();
+            api.reset();
         }
 
         dispatch(actions.setCurrent("_"));
         dispatch(actions.updateMethodCode(name, data.code, data.isPromise));
 
         dispatch(actions.setIOs(name, IOs));
-        api.saveIOs(name, IOs);
 
-        api.updateMethod(name, 1, data);
+        api.writeMethod(name, data.code, IOs);
     };
 };
 
@@ -130,8 +89,7 @@ export const runAll = () => {
         });
 
         dispatch(actions.setIOs(current, IOs));
-        dispatch(setIsDirtyAllIOs(false));
-        api.saveIOs(current, IOs);
+        // dispatch(setIsDirtyAllIOs(false));
     };
 };
 
@@ -183,14 +141,15 @@ export const removeIO = () => {
             { current, currentIO } = data;
 
         dispatch(actions.removeIO(current, currentIO));
-        api.removeIO(current, currentIO);
+        dispatch(saveMethod(current));
     };
 };
 
 export const generateIO = (name, params) => {
     return (dispatch, getState) => {
         const state = getState(),
-            methods = selectors.methodsSelector(state);
+            methods = selectors.methodsSelector(state),
+            current = selectors.currentSelector(state);
 
         const IOs = methods[name].IOs || {};
 
@@ -203,7 +162,7 @@ export const generateIO = (name, params) => {
         const input = coder.paramsToInput(params.inputs);
 
         dispatch(actions.updateIO(name, nextKey, { input, expected: " " }));
-        api.saveIO(name, nextKey, { input, expected: " " });
+        dispatch(saveMethod(current));
 
         return Promise.resolve(nextKey);
     };

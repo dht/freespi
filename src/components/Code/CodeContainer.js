@@ -14,8 +14,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        save: () => {
-            dispatch(thunks.autosave());
+        save: current => {
+            dispatch(thunks.saveMethod(current));
         },
         setCode: data => {
             dispatch(actions.updateCode(data));

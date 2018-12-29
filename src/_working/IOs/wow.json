@@ -1,0 +1,13 @@
+{
+    "IOs": {
+        "1": {
+            "input": "const b= 5; ",
+            "output": "5"
+        }
+    },
+    "stats": {
+        "ok": 0,
+        "fail": 0,
+        "empty": 1
+    }
+}

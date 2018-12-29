@@ -1,0 +1,20 @@
+{
+    "IOs": {
+        "1": {
+            "input": "const input = 25;",
+            "output": "65",
+            "expected": "5",
+            "isDirty": true
+        },
+        "2": {
+            "input": "const input = 1;",
+            "output": "17",
+            "expected": "5"
+        }
+    },
+    "stats": {
+        "ok": 0,
+        "fail": 2,
+        "empty": 0
+    }
+}

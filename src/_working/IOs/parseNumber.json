@@ -1,0 +1,19 @@
+{
+    "IOs": {
+        "1": {
+            "output": "15",
+            "input": "const a = 5;",
+            "expected": "15"
+        },
+        "2": {
+            "input": "const a = 6;",
+            "output": "16",
+            "expected": "16"
+        }
+    },
+    "stats": {
+        "ok": 2,
+        "fail": 0,
+        "empty": 0
+    }
+}

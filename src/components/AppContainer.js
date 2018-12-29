@@ -18,9 +18,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         loadWorkspaceData: (id, current = "_", currentIO = "1") => {
             dispatch(thunks.loadApp(id, current, currentIO));
         },
-        save: () => {
-            dispatch(thunks.save());
-        },
         setCurrent: current => {
             dispatch(actions.setCurrent(current));
         },
@@ -29,7 +26,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
                 { params } = match || {},
                 { codeId } = params;
 
-            dispatch(thunks.save());
+            dispatch(thunks.saveMethod(current));
             dispatch(actions.setCurrentIO(1));
 
             ownProps.history.push(`/${codeId}/${current}`);

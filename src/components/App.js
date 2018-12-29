@@ -58,7 +58,6 @@ const ${name} = (${vars.join(", ")}) => {
     componentDidMount() {
         // console.log('componentDidMount', true);
         this.loadWorkspaceData(this.props);
-        // this.saveInterval = setInterval(this.props.autosave, 5000);
     }
 
     componentWillUnmount() {
